@@ -13,7 +13,7 @@ export async function launch(settings?: Record<string, unknown>): Promise<Launch
   const dataDir = mkdtempSync(join(tmpdir(), 'upkeep-e2e-'));
   if (settings) writeFileSync(join(dataDir, 'settings.json'), JSON.stringify(settings));
   const app = await electron.launch({
-    args: ['.'],
+    args: ['.', `--lang=${process.env.UPKEEP_TEST_LANG ?? 'fr-FR'}`],
     env: { ...process.env, UPKEEP_FAKE: '1', UPKEEP_DATA: dataDir, VITE_DEV_SERVER_URL: '' },
   });
   const page = await app.firstWindow();
