@@ -1,0 +1,142 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.hug0prat.upkeep",
+  "productName": "UpKeep",
+  "copyright": "© 2026 HUG0Prat",
+  "directories": {
+    "output": "dist",
+    "buildResources": "installer"
+  },
+  "files": [
+    "dist-renderer/**/*",
+    "dist-electron/**/*",
+    "resources/**/*",
+    "package.json"
+  ],
+  "extraResources": [
+    {
+      "from": "resources/upkeep-cli.cmd",
+      "to": "upkeep-cli.cmd"
+    },
+    {
+      "from": "THIRD_PARTY_NOTICES.md",
+      "to": "THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "from": "PRIVACY.md",
+      "to": "PRIVACY.md"
+    },
+    {
+      "from": "LICENSE",
+      "to": "LICENSE"
+    },
+    {
+      "from": "LICENSE-COMMERCIAL.md",
+      "to": "LICENSE-COMMERCIAL.md"
+    }
+  ],
+  "win": {
+    "icon": "resources/icon.ico",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "portable",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "msi",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "appx",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "zip",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "7z",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    ],
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": false,
+    "createStartMenuShortcut": true,
+    "shortcutName": "UpKeep",
+    "runAfterFinish": true,
+    "license": "LICENSE",
+    "multiLanguageInstaller": true,
+    "displayLanguageSelector": true,
+    "installerLanguages": [
+      "fr_FR",
+      "en_US",
+      "de_DE",
+      "es_ES"
+    ],
+    "include": "installer/installer.nsh",
+    "deleteAppDataOnUninstall": false,
+    "artifactName": "${productName}-${version}-${arch}-setup.${ext}"
+  },
+  "portable": {
+    "artifactName": "${productName}-${version}-${arch}-portable.${ext}"
+  },
+  "msi": {
+    "oneClick": false,
+    "perMachine": false,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "UpKeep",
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "appx": {
+    "identityName": "HUG0Prat.UpKeep",
+    "publisher": "CN=HUG0Prat",
+    "publisherDisplayName": "HUG0Prat",
+    "displayName": "UpKeep",
+    "applicationId": "UpKeep",
+    "backgroundColor": "#0f1115",
+    "languages": [
+      "fr-FR",
+      "en-US",
+      "de-DE",
+      "es-ES"
+    ],
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "electronFuses": {
+    "runAsNode": true,
+    "enableCookieEncryption": true,
+    "enableNodeOptionsEnvironmentVariable": false,
+    "enableNodeCliInspectArguments": false,
+    "enableEmbeddedAsarIntegrityValidation": true,
+    "onlyLoadAppFromAsar": true
+  }
+}

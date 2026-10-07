@@ -1,0 +1,5 @@
+﻿cargo-binstall v1.25.2:
+    cargo-binstall.exe
+cargo-update v22.1.1:
+    cargo-install-update-config.exe
+    cargo-install-update.exe

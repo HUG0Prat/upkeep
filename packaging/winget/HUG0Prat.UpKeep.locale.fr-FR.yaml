@@ -1,0 +1,19 @@
+PackageIdentifier: HUG0Prat.UpKeep
+PackageVersion: 1.0.0
+PackageLocale: fr-FR
+Publisher: HUG0Prat
+PackageName: UpKeep
+License: PolyForm Noncommercial 1.0.0 (commercial license available)
+LicenseUrl: https://github.com/HUG0Prat/upkeep/blob/main/LICENSE
+PublisherUrl: https://github.com/HUG0Prat/upkeep
+PackageUrl: https://github.com/HUG0Prat/upkeep
+PrivacyUrl: https://github.com/HUG0Prat/upkeep/blob/main/PRIVACY.md
+ShortDescription: Vérification périodique des mises à jour de logiciels, Windows, pilotes, firmware et BIOS.
+Tags:
+  - updates
+  - winget
+  - drivers
+  - bios
+  - firmware
+ManifestType: defaultLocale
+ManifestVersion: 1.9.0

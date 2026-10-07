@@ -1,0 +1,1386 @@
+﻿Utilitaire Plug-and-Play Microsoft
+
+Nom publi�:     oem119.inf
+Nom d�origine�:      acpivpc.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     05/19/2026 15.11.30.14
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem99.inf
+Nom d�origine�:      acpivpc.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     05/30/2024 15.11.30.6
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem7.inf
+Nom d�origine�:      alderlakepch-psystem.inf
+Nom du fournisseur�:      INTEL
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/1968 10.1.36.7
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem75.inf
+Nom d�origine�:      arduino-org.inf
+Nom du fournisseur�:      Arduino Srl (www.arduino.org)
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     03/19/2015 1.1.1.0
+Nom du signataire�:        Arduino srl
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem55.inf
+Nom d�origine�:      arduino.inf
+Nom du fournisseur�:      Arduino LLC (www.arduino.cc)
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/24/2015 1.2.3.0
+Nom du signataire�:        Arduino SA
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem68.inf
+Nom d�origine�:      avolutenh3ext.inf
+Nom du fournisseur�:      A-Volute
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {741a2100-1023-11e9-b56e-0800200c9a66}
+Version du pilote�:     09/19/2023 1.2.40.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem130.inf
+Nom d�origine�:      cdc-acm.inf
+Nom du fournisseur�:      MediaTek Inc.
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/06/2014 2.0.1136.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem91.inf
+Nom d�origine�:      cesg64.inf
+Nom du fournisseur�:      CASIO
+Nom de la classe�:         USB
+GUID de la classe�:         {36fc9e60-c465-11cf-8056-444553540000}
+Version du pilote�:     01/29/2007 1.0.2.0
+Nom du signataire�:        CASIO COMPUTER CO.,LTD.
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem28.inf
+Nom d�origine�:      ch341ser.inf
+Nom du fournisseur�:      wch.cn
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/16/2024 3.9.2024.9
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem23.inf
+Nom d�origine�:      detectionverificationdrv.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     04/27/2023 1.0.2983.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem111.inf
+Nom d�origine�:      dtt_ext.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {bc7814a1-a80e-44b3-87c6-652eac676387}
+Version du pilote�:     09/12/2023 9.0.11401.39039
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem100.inf
+Nom d�origine�:      fbnetfilter.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     12/06/2023 4.0.1.4
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem35.inf
+Nom d�origine�:      fbnetfilter.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     08/18/2022 4.0.0.52
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem76.inf
+Nom d�origine�:      genuino.inf
+Nom du fournisseur�:      Arduino LLC (www.arduino.cc)
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     01/07/2016 1.0.3.0
+Nom du signataire�:        Arduino LLC
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem112.inf
+Nom d�origine�:      hdbusext.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {69cb4edd-bafe-4f9a-9135-c1f284d6860d}
+Version du pilote�:     04/02/2025 32.0.101.6733
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem26.inf
+Nom d�origine�:      hdx_lenovoext_avo_v4_ren_only_forte_kd_raw.inf
+Nom du fournisseur�:      Realtek Semiconductor Corp.
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {c3a63edd-2d27-4b66-b155-5e94b43d926a}
+Version du pilote�:     10/24/2023 6.0.9593.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem12.inf
+Nom d�origine�:      heci.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/16/2022 2247.3.5.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem105.inf
+Nom d�origine�:      heci.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/08/2023 2345.5.3.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem15.inf
+Nom d�origine�:      ialpss2_gpio2_adl.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/06/2022 30.100.2237.26
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem78.inf
+Nom d�origine�:      ialpss2_i2c_adl.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/06/2022 30.100.2237.26
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem77.inf
+Nom d�origine�:      iigd_ext.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {eb0a20d2-ade6-4ae2-96a6-35fcd775d9c2}
+Version du pilote�:     04/02/2025 32.0.101.6733
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem25.inf
+Nom d�origine�:      intcaudiobus.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem46.inf
+Nom d�origine�:      intcoed.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem51.inf
+Nom d�origine�:      intcoed_oemlibpath.inf
+Nom du fournisseur�:      Realtek Semiconductor Corp.
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {2a1a2071-d20a-43f8-aa82-b6dd10133949}
+Version du pilote�:     10/04/2022 10.35.220.58
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem90.inf
+Nom d�origine�:      intcsdwbus.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem109.inf
+Nom d�origine�:      ipf_acpi.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/12/2023 1.0.11401.39039
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem53.inf
+Nom d�origine�:      ipf_acpi.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/14/2022 1.0.11100.29710
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem108.inf
+Nom d�origine�:      ipf_cpu.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/12/2023 1.0.11401.39039
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem94.inf
+Nom d�origine�:      ite_pd.inf
+Nom du fournisseur�:      Lenovo Ltd.
+Nom de la classe�:         Firmware
+GUID de la classe�:         {f2e7dd72-6468-4e36-b6f1-6488f42c1b52}
+Version du pilote�:     05/29/2023 0.0.0.17
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem117.inf
+Nom d�origine�:      lenovofnandfunctionkeys.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     03/05/2026 2.1.2602.8
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem71.inf
+Nom d�origine�:      lenovofnandfunctionkeys.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/27/2024 2.0.15.14
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem137.inf
+Nom d�origine�:      logi_lamparray_hid.inf
+Nom du fournisseur�:      Logitech
+Nom de la classe�:         HIDClass
+GUID de la classe�:         {745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Version du pilote�:     09/15/2025 1.1.77.5292
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem138.inf
+Nom d�origine�:      logi_lamparray_usb.inf
+Nom du fournisseur�:      Logitech
+Nom de la classe�:         USB
+GUID de la classe�:         {36fc9e60-c465-11cf-8056-444553540000}
+Version du pilote�:     09/15/2025 1.1.77.5292
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem11.inf
+Nom d�origine�:      nanoesp32.inf
+Nom du fournisseur�:      Arduino
+Nom de la classe�:         USBDevice
+GUID de la classe�:         {88bae032-5a81-49f0-bc3d-a4ff138216d6}
+Version du pilote�:     08/08/2023 10.48.1.0
+Nom du signataire�:        Arduino SA
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem126.inf
+Nom d�origine�:      nvppc.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         USB
+GUID de la classe�:         {36fc9e60-c465-11cf-8056-444553540000}
+Version du pilote�:     08/21/2025 1.52.831.832
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem27.inf
+Nom d�origine�:      nvppc.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         USB
+GUID de la classe�:         {36fc9e60-c465-11cf-8056-444553540000}
+Version du pilote�:     03/20/2024 1.52.831.832
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem39.inf
+Nom d�origine�:      oemxaudioextfm_l.inf
+Nom du fournisseur�:      Fortemedia
+Nom de la classe�:         Extension
+GUID de la classe�:         {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ID d�extension�:       {86f65302-34a5-441c-8e16-c05c2d9e6151}
+Version du pilote�:     12/22/2023 1.0.3.299
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem101.inf
+Nom d�origine�:      plser_1.inf
+Nom du fournisseur�:      Prolific
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/27/2024 5.2.8.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem69.inf
+Nom d�origine�:      silabser.inf
+Nom du fournisseur�:      Silicon Laboratories Inc.
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     10/04/2022 11.2.0.167
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem79.inf
+Nom d�origine�:      slabvcp.inf
+Nom du fournisseur�:      Silicon Laboratories Inc.
+Nom de la classe�:         Ports
+GUID de la classe�:         {4d36e978-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/19/2016 6.7.4.261
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem141.inf
+Nom d�origine�:      udcdriver.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         System
+GUID de la classe�:         {4d36e97d-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/09/2026 26.9.0.9
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem87.inf
+Nom d�origine�:      usb_jtag_debug_unit.inf
+Nom du fournisseur�:      libwdi
+Nom de la classe�:         USBDevice
+GUID de la classe�:         {88bae032-5a81-49f0-bc3d-a4ff138216d6}
+Version du pilote�:     07/14/2021 6.1.7600.16386
+Nom du signataire�:        Espressif Systems (Shanghai) Co., Ltd.
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem74.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     01/05/2024 10.0.22013.4
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem104.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/16/2026 10.0.22029.3
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem8.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     06/05/2026 10.0.22027.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem82.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     02/13/2024 10.0.22014.7
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem2.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     03/14/2024 10.0.22016.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem21.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     05/09/2024 10.0.22018.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem58.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     04/29/2024 10.0.22017.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem3.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     03/07/2024 10.0.22015.8
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem24.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     01/17/2025 10.0.22021.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem44.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/11/2025 10.0.22024.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem132.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     12/08/2025 10.0.22026.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem42.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     08/05/2025 10.0.22023.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem122.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     10/14/2025 10.0.22025.3
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem43.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/16/2024 10.0.22019.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem73.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/25/2024 10.0.22020.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem36.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     02/22/2024 10.0.22014.9
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem120.inf
+Nom d�origine�:      xvdd.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         SCSIAdapter
+GUID de la classe�:         {4d36e97b-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     04/23/2026 10.0.22028.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem67.inf
+Nom d�origine�:      a-volutenhapo4swc.inf
+Nom du fournisseur�:      A-Volute
+Nom de la classe�:         AudioProcessingObject
+GUID de la classe�:         {5989fce8-9cd0-467d-8a6a-5419e31529d4}
+Version du pilote�:     09/21/2023 4.10.3.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem86.inf
+Nom d�origine�:      arduino_gemma.inf
+Nom du fournisseur�:      libusb-win32
+Nom de la classe�:         libusb-win32 devices
+GUID de la classe�:         {eb781aaf-9c70-4523-a5df-642a87eca567}
+Version du pilote�:     04/21/2015 1.0.0.0
+Nom du signataire�:        Arduino LLC
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem20.inf
+Nom d�origine�:      atc.inf
+Nom du fournisseur�:      BITDEFENDER S.R.L.
+Nom de la classe�:         AntiVirus
+GUID de la classe�:         {b1d1a169-c54f-4379-81db-bee7d88d7454}
+Version du pilote�:     08/07/2023 14.18.25.111
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem85.inf
+Nom d�origine�:      bddci.inf
+Nom du fournisseur�:      Bitdefender SRL
+Nom de la classe�:         Inconnu
+GUID de la classe�:         {57465043-616c-6c6f-7574-5f636c617373}
+Version du pilote�:     07/14/2023 9.29.28.960
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem88.inf
+Nom d�origine�:      bduefiscan.inf
+Nom du fournisseur�:      Bitdefender
+Nom de la classe�:         AntiVirus
+GUID de la classe�:         {b1d1a169-c54f-4379-81db-bee7d88d7454}
+Version du pilote�:     08/09/2022 14.34.23.871
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem30.inf
+Nom d�origine�:      cui_dch.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     04/02/2025 32.0.101.6733
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem47.inf
+Nom d�origine�:      cui_dch.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     03/16/2023 31.0.101.4255
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem106.inf
+Nom d�origine�:      dal.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     07/11/2023 1.44.2023.710
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem0.inf
+Nom d�origine�:      dal.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     01/21/2021 1.41.2021.121
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem50.inf
+Nom d�origine�:      dtt_sw.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     10/19/2022 9.0.11101.30293
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem110.inf
+Nom d�origine�:      dtt_sw.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     09/12/2023 9.0.11401.39039
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem62.inf
+Nom d�origine�:      fmapo.inf
+Nom du fournisseur�:      Fortemedia
+Nom de la classe�:         AudioProcessingObject
+GUID de la classe�:         {5989fce8-9cd0-467d-8a6a-5419e31529d4}
+Version du pilote�:     01/12/2024 12.1.6003.6012
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem95.inf
+Nom d�origine�:      fmservice.inf
+Nom du fournisseur�:      Fortemedia
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     11/24/2023 0.1.1.109
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem81.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     11/13/2024 10.0.22018.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem9.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     03/18/2024 10.0.22017.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem18.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     05/01/2026 10.0.22019.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem32.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     10/13/2023 10.0.22015.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem131.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     04/20/2026 10.0.22019.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem89.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     03/05/2024 10.0.22016.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem114.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     08/06/2026 10.0.22021.3
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem135.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     03/04/2026 10.0.22018.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem133.inf
+Nom d�origine�:      gameflt.inf
+Nom du fournisseur�:      Xbox
+Nom de la classe�:         HSM
+GUID de la classe�:         {d546500a-2aeb-45f6-9482-f4b1799c3177}
+Version du pilote�:     02/04/2026 10.0.22018.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+                    Attested
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem52.inf
+Nom d�origine�:      gemma.inf
+Nom du fournisseur�:      BITDEFENDER S.R.L.
+Nom de la classe�:         AntiVirus
+GUID de la classe�:         {b1d1a169-c54f-4379-81db-bee7d88d7454}
+Version du pilote�:     07/10/2023 17.38.6.291
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem83.inf
+Nom d�origine�:      hdxlvsst.inf
+Nom du fournisseur�:      Realtek Semiconductor Corp.
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     10/24/2023 6.0.9593.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem127.inf
+Nom d�origine�:      hw_goadb.inf
+Nom du fournisseur�:      Google, Inc.
+Nom de la classe�:         AndroidUsbDeviceClass
+GUID de la classe�:         {3f966bd9-fa04-4ec5-991c-d326973b5128}
+Version du pilote�:     07/11/2016 2.0.3.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem128.inf
+Nom d�origine�:      hw_gohdb.inf
+Nom du fournisseur�:      Google, Inc.
+Nom de la classe�:         AndroidUsbDeviceClass
+GUID de la classe�:         {3f966bd9-fa04-4ec5-991c-d326973b5128}
+Version du pilote�:     12/28/2015 2.0.3.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem129.inf
+Nom d�origine�:      hw_quusbnet.inf
+Nom du fournisseur�:      HUAWEI Incorporated
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     06/27/2014 1.3.0.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem116.inf
+Nom d�origine�:      ibtusb.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         Bluetooth
+GUID de la classe�:         {e0cbf06c-cd8b-4647-bb8a-263b43f0f974}
+Version du pilote�:     02/10/2025 23.120.0.4
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem14.inf
+Nom d�origine�:      ibtusb.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         Bluetooth
+GUID de la classe�:         {e0cbf06c-cd8b-4647-bb8a-263b43f0f974}
+Version du pilote�:     05/01/2024 23.60.0.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem96.inf
+Nom d�origine�:      iclsclient.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     12/06/2023 1.71.99.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem102.inf
+Nom d�origine�:      igcc_dch.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     06/10/2024 31.0.101.5590
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem1.inf
+Nom d�origine�:      igcc_dch.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     03/16/2023 31.0.101.4255
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem34.inf
+Nom d�origine�:      ignisv2.inf
+Nom du fournisseur�:      Bitdefender SRL
+Nom de la classe�:         Inconnu
+GUID de la classe�:         {57465043-616c-6c6f-7574-5f636c617373}
+Version du pilote�:     08/02/2023 11.32.38.686
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem5.inf
+Nom d�origine�:      iigd_dch.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         Display
+GUID de la classe�:         {4d36e968-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     04/02/2025 32.0.101.6733
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem17.inf
+Nom d�origine�:      intcbtau.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem113.inf
+Nom d�origine�:      intcdaud.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     12/16/2024 11.2.0.14
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem38.inf
+Nom d�origine�:      intcdaud.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     11/21/2021 11.2.0.10
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem33.inf
+Nom d�origine�:      intcdmic.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem40.inf
+Nom d�origine�:      intcsdw.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem64.inf
+Nom d�origine�:      intcsst.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem49.inf
+Nom d�origine�:      intcusb.inf
+Nom du fournisseur�:      Intel(R) Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/18/2023 10.29.0.9467
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem60.inf
+Nom d�origine�:      mewmiprov.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     11/06/2022 2246.3.3.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem107.inf
+Nom d�origine�:      mewmiprov.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     09/20/2023 2338.5.1.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem48.inf
+Nom d�origine�:      mshdadac.inf
+Nom du fournisseur�:      Intel Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     04/02/2025 32.0.101.6733
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem134.inf
+Nom d�origine�:      mtp.inf
+Nom du fournisseur�:      Microsoft
+Nom de la classe�:         WPD
+GUID de la classe�:         {eec5ad98-8080-425f-922a-dabf3de3f69a}
+Version du pilote�:     07/29/2015 1.3.0.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem6.inf
+Nom d�origine�:      nahimicbtlink.inf
+Nom du fournisseur�:      Nahimic
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     08/18/2022 2.0.2.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem59.inf
+Nom d�origine�:      nahimicxvad.inf
+Nom du fournisseur�:      Nahimic
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     08/18/2022 1.1.2.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem66.inf
+Nom d�origine�:      nahimic_mirroring.inf
+Nom du fournisseur�:      Nahimic
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     08/18/2022 2.0.3.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem29.inf
+Nom d�origine�:      netwtw08.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     04/14/2024 23.50.0.6
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem45.inf
+Nom d�origine�:      netwtw08.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     06/03/2024 23.60.1.2
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem115.inf
+Nom d�origine�:      netwtw08.inf
+Nom du fournisseur�:      Intel
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     02/06/2025 23.120.0.3
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem80.inf
+Nom d�origine�:      npcap.inf
+Nom du fournisseur�:      Nmap Project
+Nom de la classe�:         NetService
+GUID de la classe�:         {4d36e974-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     01/17/2024 14.48.34.57
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem124.inf
+Nom d�origine�:      nvhda.inf
+Nom du fournisseur�:      NVIDIA Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     10/25/2025 1.4.5.6
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem16.inf
+Nom d�origine�:      nvhda.inf
+Nom du fournisseur�:      NVIDIA Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     09/26/2024 1.4.2.6
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem123.inf
+Nom d�origine�:      nvlti.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         Display
+GUID de la classe�:         {4d36e968-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     12/02/2025 32.0.15.9144
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem125.inf
+Nom d�origine�:      nvpcf.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         SoftwareDevice
+GUID de la classe�:         {62f9c741-b25a-46ce-b54c-9bccce08b6f2}
+Version du pilote�:     09/07/2025 32.0.15.9071
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem97.inf
+Nom d�origine�:      nvpcf.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         SoftwareDevice
+GUID de la classe�:         {62f9c741-b25a-46ce-b54c-9bccce08b6f2}
+Version du pilote�:     07/22/2024 32.0.15.6549
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem4.inf
+Nom d�origine�:      nvvad.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     02/28/2024 4.65.0.3
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem136.inf
+Nom d�origine�:      nvvad.inf
+Nom du fournisseur�:      NVIDIA
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     05/13/2025 4.65.0.12
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem70.inf
+Nom d�origine�:      prnms006.inf
+Nom du fournisseur�:      Microsoft
+Nom de la classe�:         Printer
+GUID de la classe�:         {4d36e979-e325-11ce-bfc1-08002be10318}
+Version de la classe�:      4.0
+Version du pilote�:     11/29/2016 16.0.7629.4000
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem98.inf
+Nom d�origine�:      prnms009.inf
+Nom du fournisseur�:      Microsoft
+Nom de la classe�:         Printer
+GUID de la classe�:         {4d36e979-e325-11ce-bfc1-08002be10318}
+Version de la classe�:      4.0
+Version du pilote�:     06/21/2006 10.0.26100.1882
+Nom du signataire�:        Microsoft Windows
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem13.inf
+Nom d�origine�:      realtekservice.inf
+Nom du fournisseur�:      Realtek
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     10/24/2023 1.0.660.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem19.inf
+Nom d�origine�:      realtekuapo2.inf
+Nom du fournisseur�:      Realtek
+Nom de la classe�:         AudioProcessingObject
+GUID de la classe�:         {5989fce8-9cd0-467d-8a6a-5419e31529d4}
+Version du pilote�:     10/24/2023 13.235.1124.206
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem31.inf
+Nom d�origine�:      rt68cx21x64.inf
+Nom du fournisseur�:      Realtek
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/17/2023 1168.15.717.2023
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem72.inf
+Nom d�origine�:      rtucx22x64.inf
+Nom du fournisseur�:      Realtek
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     03/23/2016 11.15.327.2024
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem84.inf
+Nom d�origine�:      rtucx22x64.inf
+Nom du fournisseur�:      Realtek
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     03/16/2016 11.13.420.2023
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem10.inf
+Nom d�origine�:      sndmft.inf
+Nom du fournisseur�:      Sonix
+Nom de la classe�:         Camera
+GUID de la classe�:         {ca3e7ab9-b4c3-4ae6-8251-579ef933890f}
+Version du pilote�:     10/20/2023 10.13.22621.16
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem37.inf
+Nom d�origine�:      steamstreamingmicrophone.inf
+Nom du fournisseur�:      Valve Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/28/2017 8.33.15.17
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem65.inf
+Nom d�origine�:      steamstreamingspeakers.inf
+Nom du fournisseur�:      Valve Corporation
+Nom de la classe�:         MEDIA
+GUID de la classe�:         {4d36e96c-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     07/20/2017 17.56.13.764
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem54.inf
+Nom d�origine�:      trufos.inf
+Nom du fournisseur�:      BitDefender
+Nom de la classe�:         ActivityMonitor
+GUID de la classe�:         {b86dff51-a31e-4bac-b3cf-e8cfe75c9fc2}
+Version du pilote�:     07/20/2023 14.40.30.48
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem140.inf
+Nom d�origine�:      udccomponent.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     08/18/2026 26.9.1.9
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem121.inf
+Nom d�origine�:      udccomponent.inf
+Nom du fournisseur�:      Lenovo
+Nom de la classe�:         SoftwareComponent
+GUID de la classe�:         {5c4c3332-344d-483c-8739-259e934c9cc8}
+Version du pilote�:     07/29/2026 26.9.0.20
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Declarative
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem61.inf
+Nom d�origine�:      usbmmidd.inf
+Nom du fournisseur�:      Amyuni
+Nom de la classe�:         Display
+GUID de la classe�:         {4d36e968-e325-11ce-bfc1-08002be10318}
+Version de la classe�:      2.0
+Version du pilote�:     08/31/2021 2.0.0.1
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem41.inf
+Nom d�origine�:      vlflt.inf
+Nom du fournisseur�:      BITDEFENDER S.R.L.
+Nom de la classe�:         AntiVirus
+GUID de la classe�:         {b1d1a169-c54f-4379-81db-bee7d88d7454}
+Version du pilote�:     08/29/2023 2.0.204.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem118.inf
+Nom d�origine�:      voiceclarityep_audio_component.inf
+Nom du fournisseur�:      Microsoft Corporation
+Nom de la classe�:         AudioProcessingObject
+GUID de la classe�:         {5989fce8-9cd0-467d-8a6a-5419e31529d4}
+Version du pilote�:     06/16/2026 1.0.4.7057
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem57.inf
+Nom d�origine�:      wintun.inf
+Nom du fournisseur�:      WireGuard LLC
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     10/13/2021 0.14.0.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Legacy
+Version WHCP�:       Inconnu
+
+Nom publi�:     oem93.inf
+Nom d�origine�:      wireguard.inf
+Nom du fournisseur�:      WireGuard LLC
+Nom de la classe�:         Net
+GUID de la classe�:         {4d36e972-e325-11ce-bfc1-08002be10318}
+Version du pilote�:     05/06/2026 1.1.0.0
+Nom du signataire�:        Microsoft Windows Hardware Compatibility Publisher
+Attributs�:         Universal
+Version WHCP�:       Inconnu
+

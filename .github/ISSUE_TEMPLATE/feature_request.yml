@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest an idea or a new update source
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and what makes it hard today?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How should UpKeep behave? Mock-ups are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: source
+    attributes:
+      label: New source details (if relevant)
+      description: Tool or website, how it exposes versions (CLI, API, page), whether installs need administrator rights.
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to work on this myself.
+        - label: I can provide fixtures from my hardware (scripts/capture-fixtures.ps1).

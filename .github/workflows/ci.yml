@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Installation
+        run: npm ci
+
+      - name: Typage
+        run: npx tsc --noEmit
+
+      - name: Tests unitaires
+        run: npx vitest run
+
+      - name: Build
+        run: npx vite build
+
+      - name: Tests d'interface et d'accessibilité
+        run: npx playwright test
+
+      - name: Paquet (dossier non compressé)
+        run: npx electron-builder --win --dir --publish never
+
+      - name: Test de fumée du paquet
+        run: node scripts/smoke-packaged.mjs
+
+      - name: Rapports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapports
+          path: |
+            test-results/
+            dist/win-unpacked/resources/upkeep-cli.cmd
+          if-no-files-found: ignore

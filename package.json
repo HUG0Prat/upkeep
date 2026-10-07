@@ -1,0 +1,50 @@
+{
+  "name": "upkeep",
+  "productName": "UpKeep",
+  "version": "1.0.0",
+  "description": "Vérification périodique des mises à jour : paquets, pilotes, firmware et BIOS",
+  "author": "HUG0Prat",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "main": "dist-electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "start": "electron .",
+    "start:demo": "set UPKEEP_FAKE=1&& electron .",
+    "cli": "node dist-electron/cli.js",
+    "test": "vitest run",
+    "test:e2e": "vite build && playwright test",
+    "package": "npm run build && electron-builder --win nsis portable --x64 --publish never",
+    "dist": "node scripts/build-all.mjs",
+    "release:folder": "node scripts/release-folder.mjs",
+    "release:notes": "node scripts/release-notes.mjs"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^44.6.0",
+    "electron-builder": "^26.15.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.3",
+    "vite-plugin-electron": "^1.1.2",
+    "vitest": "^5.0.3"
+  },
+  "homepage": "https://github.com/HUG0Prat/upkeep#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HUG0Prat/upkeep.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HUG0Prat/upkeep/issues"
+  }
+}

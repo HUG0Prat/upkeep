@@ -1,0 +1,26 @@
+﻿
+-TPM pr�sent�: Vrai
+-Version du TPM�: 2.0
+-ID du fabricant du TPM�: INTC
+-Nom complet du fabricant du TPM�: Intel
+ADL             
+-Version du fabricant du TPM�: 600.18.27.2176
+-Version du PPI�: 1.3
+-Initialis�: Vrai
+-Pr�t pour le stockage�: Vrai
+-Pr�t pour lVrai
+-Compatible avec lVrai
+-D�sactivation obligatoire pour r�cup�rer�: Faux
+-D�sactiver les �l�ments possibles�: Vrai
+-Le TPM pr�sente un microprogramme vuln�rable�: Faux�tat de liaison PCR7 
+Bitlocker : Liaison impossible
+-T�che de maintenance termin�e�: Vrai
+-Version des sp�cifications du TPM�: 1.38
+-Date des erreurs du TPM�: Wednesday, December 18, 2019
+-Version du client PC�: 1.04
+-Informations de verrouillage�: 
+	-Bloqu�: Faux
+	-Compteur de verrouillage�: 0
+	-�chec d32
+	-Intervalle de verrouillage�: 7200s
+	-R�cup�ration du verrouillage�: 86400s

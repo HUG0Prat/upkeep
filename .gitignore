@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-renderer/
+dist-electron/
+release/
+test-results/
+playwright-report/
+*.log

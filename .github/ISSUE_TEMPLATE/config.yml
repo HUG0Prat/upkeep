@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or help
+    url: https://github.com/HUG0Prat/upkeep/discussions/categories/q-a
+    about: Ask questions and get help from the community.
+  - name: Security vulnerability
+    url: https://github.com/HUG0Prat/upkeep/security/advisories/new
+    about: Report vulnerabilities privately — never in a public issue.
+  - name: Commercial license
+    url: https://github.com/HUG0Prat/upkeep/discussions/categories/commercial-licensing
+    about: Commercial use or modification of UpKeep requires a commercial license.

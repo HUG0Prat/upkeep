@@ -1,0 +1,36 @@
+﻿Trouvé Git [Git.Git]
+Version : 2.55.0.5
+Publisher : The Git Development Community
+ID de l’Editeur https://gitforwindows.org/
+URL de support de l’éditeur : https://github.com/git-for-windows/git/issues
+Moniker : git
+Description :
+  Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+  Git for Windows focuses on offering a lightweight, native set of tools that bring the full feature set of the Git SCM to Windows while providing appropriate user interfaces for experienced Git users and novices alike.
+Page d’accueil : https://gitforwindows.org/
+Licence : GPL-2.0
+URL de la licence : https://github.com/git-for-windows/build-extra/blob/HEAD/LICENSE.txt
+Copyright : Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+Notes de publication :
+  Changes since Git for Windows v2.55.0(4) (August 11th 2026)
+  Following the MSYS2 project, on which Git for Windows is based, Windows 8.1 support will be dropped after Git for Windows v2.55.
+  New Features
+  - The experimental git survey command (which was never upstreamed to the core Git project) was deprecated and converted into a small shim on top of git repo structure. In the future, git repo structure should be used instead, as the git survey command will be retired eventually.
+  - Git for Windows' installer is now a 64-bit executable (x64 instead of 86).
+  - Comes with the MSYS2 runtime (Git for Windows flavor) based on Cygwin v3.6.10.
+  - Comes with OpenSSH v10.5.P1.
+  Bug Fixes
+  - The long-standing bug where Git Bash's screen was cleared after git.exe called vim (e.g. to edit a commit message) was fixed.
+  - The Bash executables in the 64-bit and ARM64 distributions no longer carry an invalid Authenticode signature.
+URL des notes de publication : https://github.com/git-for-windows/git/releases/tag/v2.55.0.windows.5
+Documentation :
+  Wiki: https://github.com/git-for-windows/git/wiki
+Mots-clés :
+  git
+  vcs
+Programme d'installation :
+  Type du programme d’installation : inno
+  URL du programme d’installation : https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.5/Git-2.55.0.5-64-bit.exe
+  SHA256 du programme d’installation : d065a4e23c3d9a6b5073d609b5be0830227ec3ca053c083ba385061ddfaf94c6
+  Date de version : 2026-08-20
+  Distribution hors ligne prise en charge : true

@@ -1,0 +1,5 @@
+﻿Nom                  ID                           Version  Disponible Source
+----------------------------------------------------------------------------
+Epic Online Services EpicGames.EpicOnlineServices 2.0.42.0 4.3.1      winget
+1 mises à niveau disponibles.
+1 package(s) a(ont) des numéros de version qui ne peuvent pas être déterminés. Utilisez --include-unknown pour afficher tous les résultats.

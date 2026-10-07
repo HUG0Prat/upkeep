@@ -1,0 +1,85 @@
+name: Bug report
+description: Something does not work as expected
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem!
+        **Security vulnerabilities must not be reported here** — see [SECURITY.md](https://github.com/HUG0Prat/upkeep/blob/main/SECURITY.md).
+        Please check the [FAQ](https://github.com/HUG0Prat/upkeep/blob/main/SUPPORT.md) and search existing issues first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the problem, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open "Updates"
+        2. Select "…"
+        3. Click "Update selection"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Detection (an update is missing or wrong)
+        - Installation
+        - Drivers / firmware / BIOS
+        - Automation / scheduling / notifications
+        - Security page
+        - Interface / accessibility / translation
+        - Command-line interface
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source concerned
+      placeholder: e.g. winget, Windows Update, NVIDIA, Lenovo…
+  - type: input
+    id: version
+    attributes:
+      label: UpKeep version
+      description: Shown in "About".
+      placeholder: e.g. 1.0.0 (installer / portable)
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Run `winver`.
+      placeholder: e.g. Windows 11 25H2 (26200)
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: PC manufacturer and model (for driver, firmware and BIOS issues)
+      placeholder: e.g. Dell XPS 13 9340
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        The source's log (Sources › card › Log) or the relevant lines of `%APPDATA%\UpKeep\logs\upkeep.log`.
+        You can also attach the diagnostic bundle (Settings › Backup › Diagnostic report) — remember that attachments are public.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and the FAQ.
+          required: true
+        - label: I reviewed the logs and attachments for personal information before posting.
+          required: true
