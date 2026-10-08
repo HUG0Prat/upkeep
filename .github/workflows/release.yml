@@ -41,7 +41,7 @@ jobs:
         run: node scripts/release-notes.mjs ${{ github.ref_name }} release-notes.md
 
       - name: Draft GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           name: UpKeep ${{ github.ref_name }}
