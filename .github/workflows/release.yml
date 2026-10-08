@@ -53,3 +53,5 @@ jobs:
             dist/*.zip
             dist/*.7z
             dist/SHA256SUMS.txt
+            dist/latest.yml
+            dist/*.blockmap

@@ -1,6 +1,6 @@
 import { makeKey, type Provider } from './types';
 import { t } from '../../shared/i18n';
-import type { EolItem, SecurityCheck, SystemInfo, UpdateItem, UpdateKind } from '../../shared/types';
+import type { EolItem, PackageSearchResult, PackageSource, SecurityCheck, SystemInfo, UpdateItem, UpdateKind } from '../../shared/types';
 
 const now = Date.now();
 const day = 86_400_000;
@@ -85,6 +85,22 @@ export const fakeProviders: Provider[] = [
   fake('fake-drv', 'Pilotes (démo)', 'driver', 'Pilotes & firmware'),
   fake('fake-fw', 'Firmware (démo)', 'firmware', 'Pilotes & firmware'),
 ];
+
+const FAKE_CATALOG: PackageSearchResult[] = [
+  { source: 'winget', id: 'VideoLAN.VLC', name: 'VLC media player', version: '3.0.21' },
+  { source: 'winget', id: '7zip.7zip', name: '7-Zip', version: '24.09', installed: true },
+  { source: 'winget', id: 'Mozilla.Firefox', name: 'Mozilla Firefox', version: '131.0.3' },
+  { source: 'winget', id: 'Notepad++.Notepad++', name: 'Notepad++', version: '8.7' },
+  { source: 'scoop', id: 'main/7zip', name: '7zip', version: '24.09', detail: 'main' },
+  { source: 'scoop', id: 'extras/vlc', name: 'vlc', version: '3.0.21', detail: 'extras' },
+];
+
+/** Recherche de démonstration : catalogue figé, les installations passent par la source « fake-pkg ». */
+export async function fakePackageSearch(query: string, sources: PackageSource[]) {
+  await new Promise((r) => setTimeout(r, 300));
+  const q = query.trim().toLowerCase();
+  return { results: FAKE_CATALOG.filter((r) => sources.includes(r.source) && `${r.name} ${r.id}`.toLowerCase().includes(q)), errors: {} };
+}
 
 export const FAKE_SYSTEM: Partial<SystemInfo> = {
   manufacturer: 'Contoso',

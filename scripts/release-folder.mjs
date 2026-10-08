@@ -8,7 +8,7 @@ const version = pkg.version;
 const repo = pkg.repository?.url?.match(/github\.com\/([^/]+\/[^/.]+)/)?.[1];
 const from = resolve('dist');
 const dest = resolve('release', `v${version}`);
-const wanted = (f) => f.startsWith(`UpKeep-${version}-`) && /\.(exe|msi|appx|zip|7z)$/i.test(f);
+const wanted = (f) => f === 'latest.yml' || (f.startsWith(`UpKeep-${version}-`) && /\.(exe|msi|appx|zip|7z|blockmap)$/i.test(f));
 
 const files = existsSync(from) ? readdirSync(from).filter(wanted) : [];
 if (!files.length) {

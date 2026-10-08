@@ -38,13 +38,19 @@ export const scoopProvider: Provider = {
       }));
   },
   async install(items, ctx) {
-    const names = items.map((i) => psQuote(safeId(i.id))).join(',');
-    const res = await powershell(`scoop update ${names} *>&1 | ForEach-Object { "$_" }`, {
-      onLine: ctx.log,
-      timeoutMs: 30 * 60_000,
-      signal: ctx.signal,
-    });
-    return { success: res.code === 0 };
+    let success = true;
+    for (const verb of ['install', 'update'] as const) {
+      const list = items.filter((i) => !!i.newInstall === (verb === 'install'));
+      if (!list.length || ctx.signal.aborted) continue;
+      const names = list.map((i) => psQuote(safeId(i.id))).join(',');
+      const res = await powershell(`scoop ${verb} ${names} *>&1 | ForEach-Object { "$_" }`, {
+        onLine: ctx.log,
+        timeoutMs: 30 * 60_000,
+        signal: ctx.signal,
+      });
+      success &&= res.code === 0;
+    }
+    return { success };
   },
 };
 

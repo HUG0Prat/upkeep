@@ -24,10 +24,12 @@ import { readArp } from './lib/inventory';
 import { createDiagnosticZip, installConsoleLogging, logsDir } from './lib/logger';
 import { disposePsPool } from './lib/psHost';
 import { actionableToast, parseLink } from './notifications';
+import { FAKE } from './providers';
+import { SelfUpdater, selfUpdateMode } from './updater';
 import { normalizeName } from '../shared/logic';
 import { resolveLang, setLang, t } from '../shared/i18n';
 import type { InstallOptions } from './engine';
-import type { Settings, UpdateItem, WeeklySummary } from '../shared/types';
+import type { PackageSearchResult, PackageSource, Settings, UpdateItem, WeeklySummary } from '../shared/types';
 
 if (process.env.UPKEEP_GPU !== '1') app.disableHardwareAcceleration();
 
@@ -52,6 +54,7 @@ let tray: Tray | null = null;
 let quitting = false;
 let windowShown = false;
 const engine = new UpdateEngine();
+let selfUpdater: SelfUpdater | null = null;
 
 if (process.defaultApp) app.setAsDefaultProtocolClient('upkeep', process.execPath, [app.getAppPath()]);
 else app.setAsDefaultProtocolClient('upkeep');
@@ -394,6 +397,15 @@ function registerIpc(): void {
   h('reboot:dismiss', () => engine.dismissReboot());
   h('inventory:get', (_e, force?: boolean) => engine.inventory(force));
   h('inventory:search', (_e, q: string) => engine.searchWinget(q));
+  h('packages:sources', () => engine.packageSources());
+  h('packages:search', (_e, q: string, sources: PackageSource[]) => engine.searchPackages(String(q), Array.isArray(sources) ? sources : []));
+  h('packages:install', (_e, list: PackageSearchResult[]) =>
+    engine
+      .installPackages(
+        (Array.isArray(list) ? list : []).map((r) => ({ source: r.source, id: String(r.id), name: String(r.name).slice(0, 200), version: r.version ? String(r.version).slice(0, 64) : undefined })),
+      )
+      .map((j) => j.id),
+  );
   h('inventory:track', (_e, name: string, id: string | null) => engine.trackProgram(name, id));
   h('hardware:get', (_e, force?: boolean) => engine.hardware(force));
   h('icons:get', (_e, names: string[]) => iconsFor(names));
@@ -437,6 +449,14 @@ function registerIpc(): void {
     app.quit();
   });
   h('app:accent', () => (process.platform === 'win32' ? `#${systemPreferences.getAccentColor().slice(0, 6)}` : null));
+  h('selfUpdate:check', () => selfUpdater?.check(true));
+  h('selfUpdate:download', () => selfUpdater?.download());
+  h('selfUpdate:install', () => {
+    if (!selfUpdater?.ready) return;
+    // quitAndInstall ferme les fenêtres avant before-quit : sans ce drapeau, la fenêtre se cacherait dans la zone de notification.
+    quitting = true;
+    selfUpdater.install();
+  });
   h('app:changelog', async () => readFile(join(RES, 'CHANGELOG.md'), 'utf8').catch(() => ''));
   ipcMain.on('badge:set', (_e, dataUrl: string | null, label: string) => {
     if (!win) return;
@@ -475,6 +495,16 @@ app.whenReady().then(async () => {
   tray.on('click', toggleMini);
   tray.on('double-click', () => showWindow());
   updateTray();
+
+  selfUpdater = new SelfUpdater(selfUpdateMode({ fake: FAKE, portable: isPortable() }), {
+    enabled: () => engine.settings.selfUpdate,
+    onState: (st) => engine.setSelfUpdate(st),
+    onFound: (v, ready) =>
+      ready
+        ? notify(t('UpKeep {v} est prêt', { v }), t('La mise à jour sera installée à la fermeture d’UpKeep, ou tout de suite depuis « À propos ».'), 'about')
+        : notify(t('UpKeep {v} est disponible', { v }), t('Détails dans « À propos ».'), 'about'),
+  });
+  selfUpdater.start();
 
   engine.on('state', (state) => {
     win?.webContents.send('state', state);

@@ -68,7 +68,7 @@ interface WingetInstalled {
   source: string;
 }
 
-async function readWingetInstalled(): Promise<WingetInstalled[]> {
+export async function readWingetInstalled(): Promise<WingetInstalled[]> {
   if (!(await commandExists('winget'))) return [];
   const mod = await powershell('if (Get-Module -ListAvailable Microsoft.WinGet.Client) { "yes" }', { timeoutMs: 30_000 });
   if (mod.stdout.includes('yes')) {
@@ -129,15 +129,19 @@ export async function searchWinget(query: string): Promise<WingetSearchResult[]>
   const res = await run('winget', ['search', '--name', query, '--source', 'winget', '--accept-source-agreements', '--disable-interactivity'], {
     timeoutMs: 60_000,
   });
-  const lines = cleanLines(res.stdout);
+  return parseWingetSearch(res.stdout).slice(0, 15);
+}
+
+/** Tableau texte de « winget search » : Nom, Id, Version, [Correspondance], Source. Les identifiants tronqués (…) sont écartés. */
+export function parseWingetSearch(stdout: string): WingetSearchResult[] {
+  const lines = cleanLines(stdout);
   const sep = lines.findIndex((l) => /^-{20,}$/.test(l.trim()));
   if (sep < 1) return [];
   const starts = [...lines[sep - 1].matchAll(/\S+/g)].map((m) => m.index!);
   const col = (l: string, i: number) => l.substring(starts[i], i + 1 < starts.length ? starts[i + 1] : undefined).trim();
   return lines
     .slice(sep + 1)
-    .filter((l) => l.trim() && l.length > starts[2])
+    .filter((l) => l.trim() && !l.startsWith('<') && l.length > starts[2])
     .map((l) => ({ name: col(l, 0), id: col(l, 1), version: col(l, 2) }))
-    .filter((r) => r.id && !/\s/.test(r.id))
-    .slice(0, 15);
+    .filter((r) => r.id && !/\s/.test(r.id) && !r.id.endsWith('…'));
 }

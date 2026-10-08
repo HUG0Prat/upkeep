@@ -356,6 +356,10 @@ input[type='checkbox'] { accent-color: var(--accent); width: 15px; height: 15px;
 
 
 .about { display: flex; gap: 20px; align-items: flex-start; }
+.self-update { display: grid; gap: 6px; margin: 4px 0 10px; }
+.self-update p { margin: 0; }
+.self-update .err-text { color: var(--err-text); }
+.self-update .row-progress { margin: 0; max-width: 320px; }
 .changelog { white-space: pre-wrap; }
 
 

@@ -31,11 +31,35 @@ for (const arch of archs) {
     const ok = run('npx', ['electron-builder', '--win', target, `--${arch}`, '--publish', 'never', `-c.directories.output="${dir}"`]);
     const files = ok && existsSync(dir) ? readdirSync(dir).filter((f) => keep.test(f) && !f.endsWith('.blockmap')) : [];
     for (const f of files) cpSync(join(dir, f), join(out, f));
+    // Blockmaps : téléchargement différentiel des mises à jour automatiques (electron-updater).
+    if (ok && target === 'nsis') for (const f of readdirSync(dir).filter((x) => x.endsWith('-setup.exe.blockmap'))) cpSync(join(dir, f), join(out, f));
     const unpacked = join(dir, arch === 'x64' ? 'win-unpacked' : `win-${arch}-unpacked`);
     const unpackedOut = join(out, basename(unpacked));
     if (ok && existsSync(unpacked) && !existsSync(unpackedOut)) cpSync(unpacked, unpackedOut, { recursive: true });
     results.push({ target, arch, ok: ok && files.length > 0, files, seconds: Math.round((Date.now() - started) / 1000) });
   }
+}
+
+// electron-builder écrit un latest.yml par architecture : on en publie un seul qui liste les deux installeurs.
+// electron-updater choisit le fichier dont le nom contient process.arch (x64 en premier, valeur par défaut).
+const setups = readdirSync(out)
+  .filter((f) => /-setup\.exe$/i.test(f))
+  .sort((a, b) => Number(b.includes('-x64-')) - Number(a.includes('-x64-')));
+if (setups.length) {
+  const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
+  const info = setups.map((f) => {
+    const buf = readFileSync(join(out, f));
+    return { url: f, sha512: createHash('sha512').update(buf).digest('base64'), size: buf.length };
+  });
+  const yml = [
+    `version: ${version}`,
+    'files:',
+    ...info.flatMap((i) => [`  - url: ${i.url}`, `    sha512: ${i.sha512}`, `    size: ${i.size}`]),
+    `path: ${info[0].url}`,
+    `sha512: ${info[0].sha512}`,
+    `releaseDate: '${new Date().toISOString()}'`,
+  ];
+  writeFileSync(join(out, 'latest.yml'), yml.join('\n') + '\n');
 }
 
 const sums = readdirSync(out)

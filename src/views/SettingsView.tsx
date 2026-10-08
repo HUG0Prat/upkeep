@@ -115,6 +115,12 @@ function General({ state }: { state: AppState }) {
       <Toggle s={s} k="minimizeToTray" label={t('Rester dans la zone de notification à la fermeture')} hint={t('Nécessaire pour la vérification périodique en arrière-plan.')} />
       <Toggle s={s} k="launchAtStartup" label={t('Lancer avec Windows')} hint={t('Démarre réduit dans la zone de notification (version installée uniquement).')} />
       <Toggle s={s} k="startHidden" label={t('Démarrer masqué')} />
+      <Toggle
+        s={s}
+        k="selfUpdate"
+        label={t('Mettre à jour UpKeep automatiquement')}
+        hint={t('Recherche les nouvelles versions publiées sur GitHub. La version installée les télécharge et les installe à sa fermeture ; les versions portable, MSI et ZIP signalent seulement la nouvelle version.')}
+      />
       <Field
         label={t('Vérifier même quand UpKeep est fermé')}
         hint={t('Crée une tâche planifiée Windows (sans droits administrateur) qui lance une vérification à la fréquence choisie.')}

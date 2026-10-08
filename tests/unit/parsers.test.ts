@@ -6,6 +6,8 @@ import { parseUpgradable, parseWslVersion } from '../../electron/providers/wsl';
 import { asusBiosVersion, asusModelCode, parseDellReport, parseHpReport } from '../../electron/providers/oem';
 import { nvidiaVersion } from '../../electron/providers/gpu';
 import { cleanLines } from '../../electron/lib/exec';
+import { parseWingetSearch } from '../../electron/lib/inventory';
+import { cleanQuery, parseChocoSearch } from '../../electron/lib/packageSearch';
 
 const WINGET_FR = [
   '   - \r   \\ \r',
@@ -119,5 +121,38 @@ describe('constructeurs', () => {
 describe('sortie console', () => {
   it('retire les spinners', () => {
     expect(cleanLines('a\r   - \rb\nc')).toEqual(['b', 'c']);
+  });
+});
+
+describe('recherche de paquets', () => {
+  it('winget search avec colonne Correspondance et résultats tronqués', () => {
+    const out = [
+      'Nom                                ID                        Version       Correspondance',
+      '-----------------------------------------------------------------------------------------',
+      '7-Zip                              7zip.7zip                 26.04         Moniker: 7zip',
+      'NanaZip                            M2Team.NanaZip            7.0.1843.0    Tag: 7zip',
+      'Nom très long                      Contoso.Identifiant.Tron… 1.0           Tag: 7zip',
+      '<entrées supplémentaires tronquées en raison de la limite de résultats>',
+    ].join('\n');
+    expect(parseWingetSearch(out)).toEqual([
+      { name: '7-Zip', id: '7zip.7zip', version: '26.04' },
+      { name: 'NanaZip', id: 'M2Team.NanaZip', version: '7.0.1843.0' },
+    ]);
+  });
+  it('winget search msstore', () => {
+    const out = ['Nom                          ID           Version', '-------------------------------------------------', 'Spotify - Music and Podcasts 9NCBCSZSJRSB Unknown'].join('\n');
+    expect(parseWingetSearch(out)).toEqual([{ name: 'Spotify - Music and Podcasts', id: '9NCBCSZSJRSB', version: 'Unknown' }]);
+  });
+  it('choco search -r', () => {
+    expect(parseChocoSearch('vlc|3.0.21\r\nvlc.install|3.0.21\r\n2 packages found.\r\n')).toEqual([
+      { id: 'vlc', version: '3.0.21' },
+      { id: 'vlc.install', version: '3.0.21' },
+    ]);
+  });
+  it('requête : accepte les noms usuels, refuse le reste', () => {
+    expect(cleanQuery('  notepad++  ')).toBe('notepad++');
+    expect(cleanQuery('Visual Studio Code')).toBe('Visual Studio Code');
+    expect(cleanQuery('éditeur')).toBe('éditeur');
+    for (const bad of ['a', 'vlc; Remove-Item C:\\','$(calc)', "x' -or '1", 'a'.repeat(101)]) expect(() => cleanQuery(bad)).toThrow();
   });
 });

@@ -1,5 +1,18 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
-import type { AppState, CleanupItem, HardwareInfo, InventoryItem, MonthlyStat, SecurityReport, Settings, UpdateDetails, WeeklySummary } from '../shared/types';
+import type {
+  AppState,
+  CleanupItem,
+  HardwareInfo,
+  InventoryItem,
+  MonthlyStat,
+  PackageSearchResult,
+  PackageSource,
+  PackageSourceInfo,
+  SecurityReport,
+  Settings,
+  UpdateDetails,
+  WeeklySummary,
+} from '../shared/types';
 
 type InstallOptions = { downloadOnly?: boolean; versions?: Record<string, string> };
 
@@ -49,6 +62,10 @@ const api = {
   inventory: (force?: boolean) => invoke<InventoryItem[]>('inventory:get', force),
   searchWinget: (q: string) => invoke<{ name: string; id: string; version: string }[]>('inventory:search', q),
   trackProgram: (name: string, id: string | null) => invoke<void>('inventory:track', name, id),
+  packageSources: () => invoke<PackageSourceInfo[]>('packages:sources'),
+  searchPackages: (q: string, sources: PackageSource[]) =>
+    invoke<{ results: PackageSearchResult[]; errors: Partial<Record<PackageSource, string>> }>('packages:search', q, sources),
+  installPackages: (list: PackageSearchResult[]) => invoke<string[]>('packages:install', list),
   hardware: (force?: boolean) => invoke<HardwareInfo>('hardware:get', force),
   icons: (names: string[]) => invoke<Record<string, string>>('icons:get', names),
   setProfile: (id: string) => invoke<void>('profile:set', id),
@@ -63,6 +80,9 @@ const api = {
   quit: () => invoke<void>('app:quit'),
   accentColor: () => invoke<string | null>('app:accent'),
   changelog: () => invoke<string>('app:changelog'),
+  checkSelfUpdate: () => invoke<void>('selfUpdate:check'),
+  downloadSelfUpdate: () => invoke<void>('selfUpdate:download'),
+  installSelfUpdate: () => invoke<void>('selfUpdate:install'),
   setBadge: (dataUrl: string | null, label: string) => ipcRenderer.send('badge:set', dataUrl, label),
   setOnline: (online: boolean) => ipcRenderer.send('net:online', online),
   onState: (cb: (state: AppState) => void) => on('state', cb),

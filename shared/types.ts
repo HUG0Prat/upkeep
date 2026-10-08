@@ -40,6 +40,8 @@ export interface UpdateItem {
   exploited?: boolean;
   optional?: boolean;
   manualUrl?: string;
+  /** Paquet absent du PC, ajouté depuis la recherche : installation et non mise à jour. */
+  newInstall?: boolean;
 }
 
 export interface UpdateDetails {
@@ -209,6 +211,9 @@ export interface Settings {
   nvidiaBranch: 'game' | 'studio';
   wslPrerelease: boolean;
   trackedPrograms: Record<string, string>;
+  selfUpdate: boolean;
+  /** Catalogues cochés dans la recherche de paquets (null : ceux des sources activées). */
+  searchSources: PackageSource[] | null;
 }
 
 export interface SystemInfo {
@@ -233,6 +238,39 @@ export interface UpdatePolicy {
   driversExcluded: boolean;
 }
 
+export type PackageSource = 'winget' | 'msstore' | 'scoop' | 'choco';
+
+export interface PackageSearchResult {
+  source: PackageSource;
+  id: string;
+  name: string;
+  version?: string;
+  /** Bucket Scoop. */
+  detail?: string;
+  installed?: boolean;
+}
+
+export interface PackageSourceInfo {
+  id: PackageSource;
+  name: string;
+  /** Gestionnaire présent sur le PC. */
+  available: boolean;
+  /** Source activée dans « Sources ». */
+  enabled: boolean;
+}
+
+/** Mise à jour d'UpKeep lui-même depuis les releases GitHub. */
+export interface SelfUpdateState {
+  /** installer : version NSIS, mise à jour sur place ; manual : portable, MSI, ZIP, AppX (lien vers la release) ; off : développement, démo. */
+  mode: 'installer' | 'manual' | 'off';
+  status: 'idle' | 'checking' | 'uptodate' | 'available' | 'downloading' | 'ready' | 'error';
+  version?: string;
+  percent?: number;
+  url?: string;
+  error?: string;
+  lastCheck?: number;
+}
+
 export interface AppState {
   updates: UpdateItem[];
   providers: ProviderInfo[];
@@ -254,6 +292,7 @@ export interface AppState {
   helperInstalled: boolean;
   scheduledTaskInstalled: boolean;
   appVersion: string;
+  selfUpdate: SelfUpdateState;
   portable: boolean;
   fake: boolean;
   lang: Lang;
@@ -455,6 +494,8 @@ export const DEFAULT_SETTINGS: Settings = {
   nvidiaBranch: 'game',
   wslPrerelease: false,
   trackedPrograms: {},
+  selfUpdate: true,
+  searchSources: null,
 };
 
 export const KIND_ORDER: Record<UpdateKind, number> = { package: 0, system: 1, driver: 2, firmware: 3 };

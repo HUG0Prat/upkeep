@@ -9,6 +9,7 @@ import { MaintenanceView } from './views/MaintenanceView';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { CommandPalette } from './components/CommandPalette';
 import { InventoryView } from './views/InventoryView';
+import { PackageSearchView } from './views/PackageSearchView';
 import { HardwareView } from './views/HardwareView';
 import { SourcesView } from './views/SourcesView';
 import { HistoryView } from './views/HistoryView';
@@ -20,8 +21,8 @@ import { Icon, type IconName } from './components/Icon';
 import { RebootBanner } from './components/Reboot';
 import logo from '../resources/icon.png';
 
-type Page = 'dashboard' | 'updates' | 'security' | 'inventory' | 'hardware' | 'maintenance' | 'history' | 'sources' | 'settings' | 'about';
-const PAGES: Page[] = ['dashboard', 'updates', 'security', 'inventory', 'hardware', 'maintenance', 'history', 'sources', 'settings', 'about'];
+type Page = 'dashboard' | 'updates' | 'search' | 'security' | 'inventory' | 'hardware' | 'maintenance' | 'history' | 'sources' | 'settings' | 'about';
+const PAGES: Page[] = ['dashboard', 'updates', 'search', 'security', 'inventory', 'hardware', 'maintenance', 'history', 'sources', 'settings', 'about'];
 
 function badgeDataUrl(n: number): string {
   const c = document.createElement('canvas');
@@ -113,6 +114,7 @@ export default function App() {
   const nav: { id: Page; label: string; icon: IconName; badge?: number; danger?: boolean }[] = [
     { id: 'dashboard', label: t('Accueil'), icon: 'chart' },
     { id: 'updates', label: t('Mises à jour'), icon: 'download', badge: count },
+    { id: 'search', label: t('Rechercher'), icon: 'search' },
     { id: 'security', label: t('Sécurité'), icon: 'shield', badge: exploited || undefined, danger: true },
     { id: 'inventory', label: t('Inventaire'), icon: 'list' },
     { id: 'hardware', label: t('Matériel'), icon: 'monitor' },
@@ -170,6 +172,7 @@ export default function App() {
           {page === 'dashboard' && <DashboardView state={state} go={go} />}
           {page === 'updates' && <UpdatesView state={state} focus={focus} onShowActivity={() => go('history')} />}
           {page === 'security' && <SecurityView state={state} go={go} />}
+          {page === 'search' && <PackageSearchView state={state} go={go} />}
           {page === 'inventory' && <InventoryView state={state} />}
           {page === 'hardware' && <HardwareView state={state} />}
           {page === 'maintenance' && <MaintenanceView state={state} />}

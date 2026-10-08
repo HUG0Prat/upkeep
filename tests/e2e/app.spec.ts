@@ -153,6 +153,37 @@ test('onglets Matériel et Inventaire non rechargés à chaque visite', async ()
   await expect(page.getByText('Lecture des programmes installés…')).toHaveCount(0, { timeout: 500 });
 });
 
+test('recherche et installation de logiciels', async () => {
+  await nav(/Rechercher/);
+  await expect(page.locator('.view h1', { hasText: 'Rechercher des logiciels' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Microsoft Store' })).toBeDisabled();
+  const input = page.getByRole('textbox', { name: 'Logiciel à rechercher' });
+  const submit = page.locator('form[role=search] button[type=submit]');
+  const results = page.getByRole('table', { name: 'Résultats de la recherche' });
+
+  await input.fill('vlc');
+  await input.press('Enter');
+  await expect(results.getByText('VideoLAN.VLC')).toBeVisible();
+  await expect(results.getByText('extras/vlc')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Scoop' }).click();
+  await submit.click();
+  await expect(results.getByText('VideoLAN.VLC')).toBeVisible();
+  await expect(results.getByText('extras/vlc')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Scoop' }).click();
+
+  await input.fill('7zip');
+  await submit.click();
+  await expect(results.locator('tr', { hasText: '7zip.7zip' }).getByText('installé')).toBeVisible();
+
+  await input.fill('vlc');
+  await submit.click();
+  await results.locator('tr', { hasText: 'VideoLAN.VLC' }).getByRole('button', { name: 'Installer' }).click();
+  await expect(page.locator('.toast')).toContainText('ajoutée à la file');
+  await page.locator('.toast').getByRole('button', { name: 'Voir l’activité' }).click();
+  await expect(page.locator('.log').first()).toContainText('Installation de VLC media player', { timeout: 15_000 });
+});
+
 test('traduction anglaise', async () => {
   await nav(/Paramètres/);
   await page.getByRole('tab', { name: 'Apparence' }).click();

@@ -1,8 +1,10 @@
 import { EventEmitter } from 'node:events';
 import { randomUUID } from 'node:crypto';
 import { FAKE, providers, getProvider } from '../providers';
-import { FAKE_SYSTEM, fakeEol, fakeSecurityChecks } from '../providers/fake';
-import type { Provider } from '../providers/types';
+import { FAKE_SYSTEM, fakeEol, fakePackageSearch, fakeSecurityChecks } from '../providers/fake';
+import { makeKey, type Provider } from '../providers/types';
+import { safeId } from '../lib/exec';
+import { invalidateInstalled, searchPackages } from '../lib/packageSearch';
 import { loadJson, saveJson, saveJsonSync } from '../lib/storage';
 import { batteryStatus, defaultConditions, getSystemInfo, isElevated, isFocusBusy, isMetered, readUpdatePolicy } from '../lib/system';
 import { helperStatus, installHelper, isCheckTaskInstalled, uninstallHelper, type HelperStatus } from '../lib/helper';
@@ -28,8 +30,12 @@ import type {
   JobType,
   Lang,
   MonthlyStat,
+  PackageSearchResult,
+  PackageSource,
+  PackageSourceInfo,
   ProviderInfo,
   SecurityReport,
+  SelfUpdateState,
   Settings,
   SystemInfo,
   UpdateDetails,
@@ -96,6 +102,7 @@ export class UpdateEngine extends EventEmitter {
   appVersion = '0.0.0';
   lang: Lang = 'fr';
   portable = false;
+  private selfUpdate: SelfUpdateState = { mode: 'off', status: 'idle' };
 
   constructor() {
     super();
@@ -239,11 +246,17 @@ export class UpdateEngine extends EventEmitter {
       helperInstalled: this.helper === 'ok',
       scheduledTaskInstalled: this.checkTaskInstalled,
       appVersion: this.appVersion,
+      selfUpdate: this.selfUpdate,
       portable: this.portable,
       fake: FAKE,
       lang: this.lang,
       autoBlockers: this.autoBlockers(),
     };
+  }
+
+  setSelfUpdate(state: SelfUpdateState): void {
+    this.selfUpdate = state;
+    this.changed();
   }
 
   jobLog(id: string): string[] {
@@ -598,6 +611,49 @@ export class UpdateEngine extends EventEmitter {
 
   install(keys: string[], opts: InstallOptions = {}): InstallJob[] {
     const items = this.findItems(keys).map((i) => (opts.versions?.[i.key] ? { ...i, targetVersion: opts.versions[i.key] } : i));
+    return this.queueItems(items, opts);
+  }
+
+  /** Catalogues interrogeables par la recherche de paquets, avec leur disponibilité sur ce PC. */
+  packageSources(): PackageSourceInfo[] {
+    const ids: PackageSource[] = ['winget', 'msstore', 'scoop', 'choco'];
+    const names: Record<PackageSource, string> = { winget: 'WinGet', msstore: 'Microsoft Store', scoop: 'Scoop', choco: 'Chocolatey' };
+    return ids.map((id) => {
+      if (FAKE) return { id, name: names[id], available: id === 'winget' || id === 'scoop', enabled: true };
+      const p = getProvider(id);
+      return { id, name: names[id], available: !!p && !!this.runtime.get(id)?.available, enabled: !!p && this.isEnabled(p) };
+    });
+  }
+
+  searchPackages(query: string, sources: PackageSource[]) {
+    const available = new Set(this.packageSources().filter((s) => s.available).map((s) => s.id));
+    const wanted = sources.filter((s) => available.has(s));
+    return FAKE ? fakePackageSearch(query, wanted) : searchPackages(query, wanted);
+  }
+
+  /** Installe des paquets absents du PC, trouvés par la recherche : mêmes tâches, file et historique que les mises à jour. */
+  installPackages(list: PackageSearchResult[]): InstallJob[] {
+    const available = new Set(this.packageSources().filter((s) => s.available).map((s) => s.id));
+    const items = list.map((r): UpdateItem => {
+      if (!available.has(r.source)) throw new Error(t('Source indisponible : {name}', { name: r.source }));
+      const providerId = FAKE ? 'fake-pkg' : r.source;
+      return {
+        key: makeKey(providerId, safeId(r.id)),
+        providerId,
+        kind: 'package',
+        id: r.id,
+        name: r.name,
+        availableVersion: r.version,
+        source: r.source,
+        iconName: r.name,
+        requiresAdmin: r.source === 'choco',
+        newInstall: true,
+      };
+    });
+    return this.queueItems(items, {});
+  }
+
+  private queueItems(items: UpdateItem[], opts: InstallOptions): InstallJob[] {
     const byProvider = new Map<string, UpdateItem[]>();
     for (const u of [...items].sort(installOrder)) byProvider.set(u.providerId, [...(byProvider.get(u.providerId) ?? []), u]);
     const created: InstallJob[] = [];
@@ -628,6 +684,8 @@ export class UpdateEngine extends EventEmitter {
   retryJob(id: string): InstallJob[] {
     const src = this.jobs.find((j) => j.id === id);
     if (!src?.items.length) return [];
+    // Installations lancées depuis la recherche : elles ne figurent pas parmi les mises à jour détectées.
+    if (src.items.every((i) => i.newInstall)) return this.queueItems(src.items, {});
     const keys = src.items.map((i) => i.key);
     const versions = Object.fromEntries(src.items.filter((i) => i.targetVersion).map((i) => [i.key, i.targetVersion!]));
     return this.install(keys, { downloadOnly: src.type === 'download', versions });
@@ -754,6 +812,7 @@ export class UpdateEngine extends EventEmitter {
 
   private onJobDone(job: InstallJob, _q: QueuedJob): void {
     saveJson('history.json', this.jobs);
+    if (job.items.some((i) => i.newInstall)) invalidateInstalled();
     this.emit('job-done', job);
     this.changed();
     if (job.type === 'forget-device' || job.type === 'unhide') void this.checkProvider('windowsupdate');

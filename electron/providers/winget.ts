@@ -151,7 +151,7 @@ async function checkTracked(ctx: CheckContext, known: Set<string>): Promise<Upda
 function installArgs(item: UpdateItem, ctx: InstallContext, source: string): string[] {
   const opts = ctx.settings.packageOptions[item.key] ?? {};
   const tracked = item.category === TRACKED;
-  const verb = item.targetVersion || tracked ? 'install' : 'upgrade';
+  const verb = item.targetVersion || tracked || item.newInstall ? 'install' : 'upgrade';
   const args = [verb, '--id', safeId(item.id), '--exact', '--silent', '--accept-package-agreements', ...COMMON, '--source', source];
   if (item.targetVersion) args.push('--version', item.targetVersion, '--force');
   if (tracked) args.push('--force');

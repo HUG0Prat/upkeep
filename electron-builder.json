@@ -3,6 +3,14 @@
   "appId": "com.hug0prat.upkeep",
   "productName": "UpKeep",
   "copyright": "© 2026 HUG0Prat",
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "HUG0Prat",
+      "repo": "upkeep",
+      "releaseType": "release"
+    }
+  ],
   "directories": {
     "output": "dist",
     "buildResources": "installer"
