@@ -160,7 +160,7 @@ Every release provides the following packages for **x64** and **ARM64** (replace
 Check downloads against `SHA256SUMS.txt`:
 
 ```powershell
-Get-FileHash .\UpKeep-1.0.0-x64-setup.exe -Algorithm SHA256
+Get-FileHash .\UpKeep-1.0.1-x64-setup.exe -Algorithm SHA256
 ```
 
 ### Installer
@@ -182,7 +182,7 @@ Run `UpKeep-<version>-<arch>-portable.exe` from anywhere. Settings and history a
 ### MSI
 
 ```powershell
-msiexec /i UpKeep-1.0.0-x64.msi /qn
+msiexec /i UpKeep-1.0.1-x64.msi /qn
 ```
 
 ### MSIX / AppX
@@ -190,7 +190,7 @@ msiexec /i UpKeep-1.0.0-x64.msi /qn
 The package is not signed by a trusted publisher yet. On Windows 11, turn on *Developer Mode*, then:
 
 ```powershell
-Add-AppxPackage .\UpKeep-1.0.0-x64.appx -AllowUnsigned
+Add-AppxPackage .\UpKeep-1.0.1-x64.appx -AllowUnsigned
 ```
 
 ### winget

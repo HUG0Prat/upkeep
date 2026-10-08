@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-08
+
+### Fixed
+
+- Lenovo (LSUClient): update versions were sent to the interface as objects, which left the window blank (React error #31). Versions are now read as text, and unreadable versions (`0.0.0.0`) are shown as unknown. Cached results affected by the bug are discarded on startup.
+
+### Changed
+
+- A rendering error anywhere in the interface, including the compact tray window, now shows an error message with *Retry* and *Reload interface* instead of a blank window.
+
 ## [1.0.0] - 2026-10-07
 
 First public release.
@@ -58,5 +68,6 @@ First public release.
 
 - Guided multilingual installer (per-user or all users, folder, desktop shortcut), portable executable, MSI, MSIX/AppX, ZIP and 7z, for x64 and ARM64, with SHA-256 checksums.
 
-[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/HUG0Prat/upkeep/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/HUG0Prat/upkeep/releases/tag/v1.0.0

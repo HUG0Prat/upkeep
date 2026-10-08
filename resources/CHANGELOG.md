@@ -1,3 +1,9 @@
+1.0.1 — 08/10/2026
+
+Corrections
+- Lenovo (LSUClient) : les versions des mises à jour arrivaient dans l'interface sous forme d'objets et laissaient la fenêtre vide (erreur React #31). Elles sont désormais lues comme du texte ; une version illisible (0.0.0.0) est affichée comme inconnue. Les résultats en cache touchés sont ignorés au démarrage.
+- Une erreur d'affichage, y compris dans la fenêtre réduite de la zone de notification, affiche maintenant un message avec « Réessayer » et « Recharger l'interface » au lieu d'une fenêtre vide.
+
 1.0.0 — 07/10/2026 — première version publique
 
 Sources

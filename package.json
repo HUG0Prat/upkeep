@@ -1,7 +1,7 @@
 {
   "name": "upkeep",
   "productName": "UpKeep",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vérification périodique des mises à jour : paquets, pilotes, firmware et BIOS",
   "author": "HUG0Prat",
   "license": "PolyForm-Noncommercial-1.0.0",
