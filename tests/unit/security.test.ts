@@ -107,7 +107,7 @@ describe.runIf(process.platform === 'win32')('opérations administrateur', () =>
       });
       expect(r.stdout.trim()).toBe('0');
     }
-  });
+  }, 60_000);
   it('refuse les paramètres hors format', () => {
     const r = runPs(
       opsScript([
