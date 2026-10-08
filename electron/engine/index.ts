@@ -105,7 +105,8 @@ export class UpdateEngine extends EventEmitter {
     const cache = loadJson<Record<string, { at: number; items: UpdateItem[] }>>('cache.json', {});
     for (const [id, c] of Object.entries(cache)) {
       const rt = this.runtime.get(id);
-      if (rt) {
+      // Un cache écrit avant la conversion [string] de LSUClient peut contenir des versions objets : on l'ignore.
+      if (rt && c.items.every((i) => [i.currentVersion, i.availableVersion].every((v) => v == null || typeof v === 'string'))) {
         rt.updates = c.items;
         rt.lastCheck = c.at;
       }

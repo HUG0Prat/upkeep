@@ -89,6 +89,7 @@ export const ES: Record<string, string> = {
   "Ces applications seront fermées avant la mise à jour : {list}": "Estas aplicaciones se cerrarán antes de actualizar: {list}",
   "Ces programmes ne sont suivis par aucun gestionnaire. Associez-les à un paquet winget pour qu’UpKeep surveille leurs mises à jour.": "Estos programas no están seguidos por ningún gestor de paquetes. Vincúlalos a un paquete winget para que UpKeep vigile sus actualizaciones.",
   "Cette page a rencontré une erreur": "Esta página ha encontrado un error",
+  "L’interface a rencontré une erreur": "La interfaz ha encontrado un error",
   "Champ": "Campo",
   "Charge": "Carga",
   "Chargement des détails…": "Cargando detalles…",

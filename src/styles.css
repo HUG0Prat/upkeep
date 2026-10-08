@@ -118,6 +118,7 @@ mark { background: color-mix(in srgb, var(--warn) 40%, transparent); color: inhe
 .sys-model { font-weight: 600; }
 
 .content { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+.view.fatal { height: 100vh; box-sizing: border-box; padding-bottom: 22px; }
 .view { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 22px 26px 0; gap: 12px; overflow: auto; }
 .view-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }

@@ -569,6 +569,7 @@ export const EN: Record<string, string> = {
   'Ce pilote vise un périphérique déjà branché un jour mais absent aujourd’hui.': 'This driver targets a device that was plugged in once but is absent today.',
   'Ces 7 derniers jours': 'Last 7 days',
   'Cette page a rencontré une erreur': 'This page ran into an error',
+  'L’interface a rencontré une erreur': 'The interface ran into an error',
   'Chiffrement BitLocker du disque système': 'BitLocker encryption of the system drive',
   'Colonnes et affichage': 'Columns and display',
   'Contrôle': 'Check',

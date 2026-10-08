@@ -89,6 +89,7 @@ export const DE: Record<string, string> = {
   "Ces applications seront fermées avant la mise à jour : {list}": "Diese Anwendungen werden vor dem Update geschlossen: {list}",
   "Ces programmes ne sont suivis par aucun gestionnaire. Associez-les à un paquet winget pour qu’UpKeep surveille leurs mises à jour.": "Diese Programme werden von keinem Paketmanager verfolgt. Verknüpfen Sie sie mit einem winget-Paket, damit UpKeep ihre Updates überwacht.",
   "Cette page a rencontré une erreur": "Auf dieser Seite ist ein Fehler aufgetreten",
+  "L’interface a rencontré une erreur": "In der Oberfläche ist ein Fehler aufgetreten",
   "Champ": "Feld",
   "Charge": "Ladung",
   "Chargement des détails…": "Details werden geladen…",

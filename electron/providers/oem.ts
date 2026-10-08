@@ -54,7 +54,7 @@ export function mapLsuUpdate(u: LsuUpdate, biosVersion: string): UpdateItem {
     id: u.ID,
     name: u.Title,
     currentVersion: isBios ? biosVersion : undefined,
-    availableVersion: u.Version ?? undefined,
+    availableVersion: u.Version && u.Version !== '0.0.0.0' ? u.Version : undefined,
     publishedAt: u.ReleaseDate ? Date.parse(u.ReleaseDate) || undefined : undefined,
     source: 'Lenovo',
     category: u.Category ?? u.Type ?? undefined,
@@ -96,7 +96,7 @@ Import-Module ${psQuote(lsuModulePath || 'LSUClient')}
 $out = Get-LSUpdate | ForEach-Object {
   $readme = $_.Files | Where-Object { "$($_.Kind)" -match 'Readme' } | Select-Object -First 1
   [pscustomobject]@{
-    ID = $_.ID; Title = $_.Title; Category = $_.Category; Version = $_.Version
+    ID = $_.ID; Title = $_.Title; Category = $_.Category; Version = [string]$_.Version
     Severity = [string]$_.Severity; RebootType = [string]$_.RebootType; Type = [string]$_.Type
     Size = ($_.Files | Where-Object { $_.Size } | Measure-Object -Property Size -Sum).Sum
     Readme = if ($readme) { [string]$readme.AbsoluteLocation } else { $null }
