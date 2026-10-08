@@ -106,9 +106,11 @@ UpKeep brings them together:
 - Dashboard, global search (<kbd>Ctrl</kbd>+<kbd>K</kbd>), keyboard shortcuts
 - Actionable Windows notifications (*Update*, *Later*, *Ignore*) and a weekly summary
 - Profiles, wildcard rules, quarantine, per-package options
+- Find and install software from WinGet, Microsoft Store, Scoop and Chocolatey
 - Inventory of installed software, hardware sheet, history with CSV export
 - Cleanup of superseded drivers and caches; forget absent devices
 - Export and re-import your package list on another PC
+- Updates itself from GitHub releases (installed version; other formats are notified)
 
 </td></tr>
 </table>
@@ -160,7 +162,7 @@ Every release provides the following packages for **x64** and **ARM64** (replace
 Check downloads against `SHA256SUMS.txt`:
 
 ```powershell
-Get-FileHash .\UpKeep-1.0.1-x64-setup.exe -Algorithm SHA256
+Get-FileHash .\UpKeep-1.1.0-x64-setup.exe -Algorithm SHA256
 ```
 
 ### Installer
@@ -182,7 +184,7 @@ Run `UpKeep-<version>-<arch>-portable.exe` from anywhere. Settings and history a
 ### MSI
 
 ```powershell
-msiexec /i UpKeep-1.0.1-x64.msi /qn
+msiexec /i UpKeep-1.1.0-x64.msi /qn
 ```
 
 ### MSIX / AppX
@@ -190,7 +192,7 @@ msiexec /i UpKeep-1.0.1-x64.msi /qn
 The package is not signed by a trusted publisher yet. On Windows 11, turn on *Developer Mode*, then:
 
 ```powershell
-Add-AppxPackage .\UpKeep-1.0.1-x64.appx -AllowUnsigned
+Add-AppxPackage .\UpKeep-1.1.0-x64.appx -AllowUnsigned
 ```
 
 ### winget
@@ -368,7 +370,7 @@ UpKeep is in active development (version 1.x). Known limitations:
 - **SSD firmware** links to the manufacturer's tool; versions are not compared.
 - **Windows feature updates** are detected; installation is handed over to Windows Update.
 - Dell, HP and ASUS sources and the administrator helper still need wider testing on real hardware — [fixtures from your PC](CONTRIBUTING.md#testing-on-real-hardware) are very welcome.
-- Release binaries are not yet code-signed; self-update is prepared but disabled until they are.
+- Release binaries are not yet code-signed. Self-update checks each installer against the SHA-512 published in the release's `latest.yml`, but not against an Authenticode signature.
 
 ## Contributing
 

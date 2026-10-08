@@ -1,3 +1,9 @@
+1.1.0 — 08/10/2026
+
+Nouveautés
+- Recherche de logiciels : la page « Rechercher » interroge les catalogues WinGet, Microsoft Store, Scoop et Chocolatey et installe un programme en un clic, avec la même file, la même gestion UAC et le même historique que les mises à jour. Seuls les gestionnaires présents sur le PC sont proposés ; les catalogues à interroger se cochent, et les logiciels déjà installés sont signalés.
+- Mise à jour automatique d'UpKeep depuis les releases GitHub publiées. La version installée télécharge la nouvelle version en arrière-plan (empreinte SHA-512 vérifiée) et l'installe à la fermeture, ou tout de suite avec « Redémarrer et installer » dans « À propos ». Les versions portable, MSI, ZIP et AppX signalent la nouvelle version avec un lien vers sa page. Désactivable dans Paramètres › Général.
+
 1.0.1 — 08/10/2026
 
 Corrections

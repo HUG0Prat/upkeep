@@ -38,7 +38,8 @@ UpKeep only contacts **public** services, **without any identifier**, to learn t
 | nvidia.com / geforce.com | graphics driver | GPU model |
 | intel.com, asus.com, dl.dell.com, ftp.hp.com | vendor drivers and BIOS | PC model when relevant |
 | Google, Microsoft Edge, Mozilla (release pages) | browsers | nothing |
-| api.github.com | release notes, WSL versions | repository name |
+| api.github.com, github.com | release notes, WSL versions, new UpKeep versions (self-update can be turned off in *Settings*) | repository name, UpKeep version |
+| Scoop buckets, community.chocolatey.org | software search (*Search* page), Chocolatey updates | the search terms you type |
 | hub.docker.com | Docker images | image names |
 
 None of these requests contains a personal or machine identifier. As with any Internet connection, these services see your IP address and are governed by their own privacy policies.

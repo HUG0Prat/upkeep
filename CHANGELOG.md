@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-08
+
+### Added
+
+- **Software search**: a new *Search* page queries the WinGet, Microsoft Store, Scoop and Chocolatey catalogs and installs a program in one click, through the same queue, UAC handling and history as updates. Only the package managers present on the PC are offered; the catalogs to query can be ticked, and programs already installed are marked.
+- **UpKeep updates itself** from the published GitHub releases. The installed version downloads the new version in the background (SHA-512 checked against `latest.yml`) and installs it when UpKeep closes, or right away with *Restart and install* in *About*. The portable, MSI, ZIP and AppX versions report the new version and link to its release page. Can be turned off in *Settings › General*.
+
 ## [1.0.1] - 2026-10-08
 
 ### Fixed
@@ -68,6 +75,7 @@ First public release.
 
 - Guided multilingual installer (per-user or all users, folder, desktop shortcut), portable executable, MSI, MSIX/AppX, ZIP and 7z, for x64 and ARM64, with SHA-256 checksums.
 
-[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/HUG0Prat/upkeep/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/HUG0Prat/upkeep/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/HUG0Prat/upkeep/releases/tag/v1.0.0

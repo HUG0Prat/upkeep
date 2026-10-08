@@ -74,7 +74,7 @@ UpKeep les réunit :
 
 **Sécurité** — failles activement exploitées (CISA KEV) ; vulnérabilités des paquets de développement (OSV) et des logiciels de bureau courants (NVD) ; fins de support (endoflife.date) ; état du poste (Defender, pare-feu, BitLocker, Secure Boot, TPM, UAC, SmartScreen) ; installeurs vérifiés (SHA-256, signature Authenticode, éditeur attendu).
 
-**Au quotidien** — tableau de bord, recherche globale (<kbd>Ctrl</kbd>+<kbd>K</kbd>), raccourcis clavier ; notifications Windows actionnables et résumé hebdomadaire ; profils, règles à jokers, quarantaine, options par paquet ; inventaire, fiche matériel, historique exportable en CSV ; nettoyage des anciens pilotes et des caches ; export et réimport de la liste des paquets.
+**Au quotidien** — tableau de bord, recherche globale (<kbd>Ctrl</kbd>+<kbd>K</kbd>), raccourcis clavier ; notifications Windows actionnables et résumé hebdomadaire ; profils, règles à jokers, quarantaine, options par paquet ; recherche et installation de logiciels (WinGet, Microsoft Store, Scoop, Chocolatey) ; inventaire, fiche matériel, historique exportable en CSV ; nettoyage des anciens pilotes et des caches ; export et réimport de la liste des paquets ; mise à jour automatique d'UpKeep depuis les releases GitHub.
 
 ## Sources prises en charge
 
@@ -183,7 +183,7 @@ npm run start:demo
 
 ## État du projet
 
-Version 1.x, en développement actif. Limites connues : pilotes AMD signalés sans comparaison de version (AMD bloque les accès automatisés) ; firmware des SSD renvoyé vers l'outil du fabricant ; mises à jour de fonctionnalités confiées à Windows Update ; Dell, HP, ASUS et l'assistant administrateur à tester plus largement ; exécutables pas encore signés.
+Version 1.x, en développement actif. Limites connues : pilotes AMD signalés sans comparaison de version (AMD bloque les accès automatisés) ; firmware des SSD renvoyé vers l'outil du fabricant ; mises à jour de fonctionnalités confiées à Windows Update ; Dell, HP, ASUS et l'assistant administrateur à tester plus largement ; exécutables pas encore signés (la mise à jour automatique vérifie l'empreinte SHA-512 publiée dans la release, pas de signature Authenticode).
 
 ## Contribuer
 
