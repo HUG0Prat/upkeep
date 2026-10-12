@@ -348,8 +348,86 @@ export interface HardwareInfo {
   gpus: GpuInfo[];
   disks: DiskInfo[];
   peripherals: PeripheralInfo[];
-  battery?: { charge: number; onAc: boolean; health?: number };
+  battery?: { charge: number; onAc: boolean; health?: number; cycles?: number };
   supportUrl?: string;
+  /** État de santé des composants (disques, mémoire, erreurs matérielles…), absent si la lecture a échoué. */
+  health?: SecurityCheck[];
+  /** Périphériques que Windows signale en erreur (Gestionnaire de périphériques). */
+  problemDevices?: ProblemDevice[];
+}
+
+export interface ProblemDevice {
+  name: string;
+  className?: string;
+  code: number;
+}
+
+export type PortState = 'free' | 'used' | 'fault';
+
+export interface PortInfo {
+  /** Identifiant stable (hub + numéro de port) pour suivre un port d'une lecture à l'autre. */
+  id: string;
+  kind: 'usb' | 'ethernet' | 'display';
+  /** USB-C, USB 3, USB 2, Ethernet, HDMI… */
+  label: string;
+  /** Hub ou carte réseau qui porte le port. */
+  location?: string;
+  state: PortState;
+  device?: string;
+  /** Vitesse, ou raison du dysfonctionnement. */
+  detail?: string;
+}
+
+export interface PortsReport {
+  ports: PortInfo[];
+  /** Ports USB internes (webcam, Bluetooth, lecteur d'empreintes…), non accessibles de l'extérieur. */
+  internal: number;
+  at: number;
+}
+
+export interface DriverInfo {
+  device: string;
+  className?: string;
+  provider?: string;
+  manufacturer?: string;
+  version?: string;
+  date?: string;
+  inf?: string;
+  signed?: boolean;
+  hardwareId?: string;
+  /** Code d'erreur du Gestionnaire de périphériques (0 ou absent : fonctionne). */
+  problem?: number;
+}
+
+/** Pilote trouvé dans le catalogue Microsoft Update. */
+export interface DriverSearchResult {
+  id: string;
+  title: string;
+  products: string;
+  classification: string;
+  date: string;
+  version: string;
+  size: string;
+  sizeBytes?: number;
+}
+
+export type BiosFeature = 'secureboot' | 'tpm' | 'virtualization';
+
+export interface BiosGuide {
+  feature: BiosFeature;
+  /** Fabricant, modèle et version du BIOS détectés. */
+  machine: string;
+  bios: string;
+  firmwareType: 'UEFI' | 'Legacy' | 'unknown';
+  /** Touche(s) d'accès au BIOS au démarrage. */
+  entry: string;
+  steps: string[];
+  warnings: string[];
+  /** Recherche de la documentation du constructeur pour ce modèle. */
+  docsUrl: string;
+  /** Redémarrage direct vers les réglages UEFI possible (shutdown /fw). */
+  canRebootToFirmware: boolean;
+  bitlockerOn: boolean;
 }
 
 export type CheckStatus = 'ok' | 'warn' | 'bad' | 'unknown';
@@ -360,6 +438,8 @@ export interface SecurityCheck {
   status: CheckStatus;
   value: string;
   advice?: string;
+  /** Réglage du BIOS/UEFI qui corrige ce point : une aide pas à pas est proposée. */
+  bios?: BiosFeature;
 }
 
 export interface EolItem {
@@ -387,6 +467,8 @@ export interface CleanupItem {
   description: string;
   sizeBytes?: number;
   count?: number;
+  /** Taille non calculée à l'avance (trop longue à mesurer) : le nettoyage reste proposé. */
+  sizeUnknown?: boolean;
   requiresAdmin: boolean;
 }
 

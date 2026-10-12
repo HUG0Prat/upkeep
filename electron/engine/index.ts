@@ -1,7 +1,8 @@
 import { EventEmitter } from 'node:events';
 import { randomUUID } from 'node:crypto';
 import { FAKE, providers, getProvider } from '../providers';
-import { FAKE_SYSTEM, fakeEol, fakePackageSearch, fakeSecurityChecks } from '../providers/fake';
+import { FAKE_SYSTEM, fakeDriverSearch, fakeEol, fakePackageSearch, fakeSecurityChecks } from '../providers/fake';
+import { fetchInstaller } from '../providers/gpu';
 import { makeKey, type Provider } from '../providers/types';
 import { safeId } from '../lib/exec';
 import { invalidateInstalled, searchPackages } from '../lib/packageSearch';
@@ -11,6 +12,9 @@ import { helperStatus, installHelper, isCheckTaskInstalled, uninstallHelper, typ
 import { githubNotesBetween, githubRepo, osvAliases, osvBatch } from '../lib/registries';
 import { readInventory, searchWinget } from '../lib/inventory';
 import { readHardware } from '../lib/hardware';
+import { catalogFiles, readDrivers, searchDriverCatalog } from '../lib/drivers';
+import { readPorts } from '../lib/ports';
+import { buildBiosGuide, readFirmwareInfo } from '../lib/biosGuide';
 import { mapLimit } from '../lib/http';
 import { annotateExploited, annotateNvd, eolReport, kevCatalog, securityChecks } from '../lib/security';
 import { cleanupOps, cleanUser, listCleanup } from '../lib/maintenance';
@@ -22,7 +26,12 @@ import { ruleActions } from '../../shared/rules';
 import { t } from '../../shared/i18n';
 import type {
   AppState,
+  BiosFeature,
+  BiosGuide,
   CleanupItem,
+  DriverInfo,
+  DriverSearchResult,
+  PortsReport,
   Conditions,
   HardwareInfo,
   InstallJob,
@@ -45,6 +54,12 @@ import type {
 } from '../../shared/types';
 
 const MAX_JOBS_KEPT = 150;
+/** Tâches d'installation de pilotes trouvés dans le catalogue Microsoft Update (pas une source vérifiée périodiquement). */
+export const CATALOG_PROVIDER = 'driver-catalog';
+
+function catalogResult(i: UpdateItem): DriverSearchResult {
+  return { id: i.id, title: i.name, version: i.availableVersion ?? '', products: i.details ?? '', classification: i.category ?? '', date: '', size: '', sizeBytes: i.sizeBytes };
+}
 const TICK_MS = 60_000;
 const STATE_LOG_LINES = 40;
 
@@ -98,6 +113,7 @@ export class UpdateEngine extends EventEmitter {
   private securityCache?: { at: number; data: Promise<SecurityReport> };
   private invCache?: { at: number; key: string; data: Promise<InventoryItem[]> };
   private hwCache?: { at: number; data: Promise<HardwareInfo> };
+  private driversCache?: { at: number; data: Promise<DriverInfo[]> };
   private lastWeekly = loadJson<number>('weekly.json', 0);
   appVersion = '0.0.0';
   lang: Lang = 'fr';
@@ -684,11 +700,28 @@ export class UpdateEngine extends EventEmitter {
   retryJob(id: string): InstallJob[] {
     const src = this.jobs.find((j) => j.id === id);
     if (!src?.items.length) return [];
-    // Installations lancées depuis la recherche : elles ne figurent pas parmi les mises à jour détectées.
-    if (src.items.every((i) => i.newInstall)) return this.queueItems(src.items, {});
-    const keys = src.items.map((i) => i.key);
-    const versions = Object.fromEntries(src.items.filter((i) => i.targetVersion).map((i) => [i.key, i.targetVersion!]));
-    return this.install(keys, { downloadOnly: src.type === 'download', versions });
+    if (src.type === 'driver-rollback') {
+      return src.items.map((i) => this.driverRollback(src.id, i.key));
+    }
+    if (src.providerId === CATALOG_PROVIDER) return src.items.map((i) => this.installCatalogDriver(catalogResult(i)));
+    if (src.type === 'forget-device' || src.type === 'unhide') {
+      const job =
+        src.type === 'unhide'
+          ? this.runElevatedTask('unhide', src.providerId, src.items, [{ op: 'wu-unhide', ids: src.items.map((i) => i.id) }])
+          : this.runElevatedTask('forget-device', src.providerId, src.items, src.items.filter((i) => i.hardwareId).map((i) => ({ op: 'forget-device' as const, hardwareId: i.hardwareId! })));
+      return [job];
+    }
+    // Les éléments de la tâche d'origine servent de repli : après une revérification (ou au démarrage, avant la
+    // première), ils peuvent ne plus figurer parmi les mises à jour détectées, et la relance ne faisait alors rien.
+    const current = new Map(this.findItems(src.items.map((i) => i.key)).map((i) => [i.key, i]));
+    const items = src.items.map((i) => {
+      const cur = current.get(i.key);
+      if (!cur) return i;
+      return i.targetVersion ? { ...cur, targetVersion: i.targetVersion } : i.newInstall ? { ...cur, newInstall: true } : cur;
+    });
+    const created = this.queueItems(items, { downloadOnly: src.type === 'download' });
+    if (!created.length) throw new Error(t('Impossible de relancer cette tâche : la source « {name} » n’est plus disponible.', { name: src.providerId }));
+    return created;
   }
 
   private async withProcessHandling(job: InstallJob, items: UpdateItem[], ctx: Parameters<NonNullable<Provider['install']>>[1], fn: () => Promise<{ success: boolean; rebootRequired?: boolean }>) {
@@ -763,10 +796,10 @@ export class UpdateEngine extends EventEmitter {
     if (items.length) this.runElevatedTask('unhide', items[0].providerId, items, [{ op: 'wu-unhide', ids: items.map((i) => i.id) }]);
   }
 
-  driverRollback(jobId: string, key: string): void {
+  driverRollback(jobId: string, key: string): InstallJob {
     const item = this.jobs.find((j) => j.id === jobId)?.items.find((i) => i.key === key);
     if (!item?.hardwareId) throw new Error(t('Identifiant matériel inconnu pour ce pilote.'));
-    this.runElevatedTask('driver-rollback', item.providerId, [item], [{ op: 'driver-rollback', hardwareId: item.hardwareId }]);
+    return this.runElevatedTask('driver-rollback', item.providerId, [item], [{ op: 'driver-rollback', hardwareId: item.hardwareId }]);
   }
 
   forgetDevices(keys: string[]): void {
@@ -813,6 +846,10 @@ export class UpdateEngine extends EventEmitter {
   private onJobDone(job: InstallJob, _q: QueuedJob): void {
     saveJson('history.json', this.jobs);
     if (job.items.some((i) => i.newInstall)) invalidateInstalled();
+    if (job.items.some((i) => i.kind === 'driver')) {
+      this.driversCache = undefined;
+      this.hwCache = undefined;
+    }
     this.emit('job-done', job);
     this.changed();
     if (job.type === 'forget-device' || job.type === 'unhide') void this.checkProvider('windowsupdate');
@@ -864,6 +901,91 @@ export class UpdateEngine extends EventEmitter {
       data.catch(() => (this.invCache = undefined));
     }
     return this.invCache.data;
+  }
+
+  drivers(force = false): Promise<DriverInfo[]> {
+    if (force || !this.driversCache || Date.now() - this.driversCache.at > 15 * 60_000) {
+      const data = readDrivers();
+      this.driversCache = { at: Date.now(), data };
+      data.catch(() => (this.driversCache = undefined));
+    }
+    return this.driversCache.data;
+  }
+
+  ports(): Promise<PortsReport> {
+    return readPorts();
+  }
+
+  searchDrivers(query: string): Promise<DriverSearchResult[]> {
+    return FAKE ? fakeDriverSearch(query) : searchDriverCatalog(query);
+  }
+
+  /** Pilote du catalogue Microsoft Update : téléchargé sans droits, vérifié (SHA-256 du catalogue, signature Microsoft), puis installé par pnputil. */
+  installCatalogDriver(r: DriverSearchResult): InstallJob {
+    const item: UpdateItem = {
+      key: makeKey(CATALOG_PROVIDER, r.id),
+      providerId: CATALOG_PROVIDER,
+      kind: 'driver',
+      id: r.id,
+      name: r.title,
+      availableVersion: r.version || undefined,
+      source: 'Microsoft Update Catalog',
+      sizeBytes: r.sizeBytes,
+      category: r.classification,
+      details: r.products,
+      requiresAdmin: true,
+      newInstall: true,
+    };
+    if (FAKE) return this.simulatedTask('install', CATALOG_PROVIDER, [item], t('Installation du pilote {name}', { name: r.title }));
+    const job = this.newJob('install', CATALOG_PROVIDER, [item], { elevated: true });
+    this.enqueue({
+      job,
+      elevated: async (ctx) => {
+        ctx.log(t('Recherche des fichiers dans le catalogue Microsoft Update…'));
+        const files = await catalogFiles(r.id);
+        if (!files.length) throw new Error(t('Aucun fichier téléchargeable pour ce pilote dans le catalogue.'));
+        const ops: ElevatedOp[] = [];
+        for (const f of files) {
+          const cab = await fetchInstaller(f.url, 'drivers', ctx, /O=Microsoft Corporation/);
+          if (f.sha256 && f.sha256.toLowerCase() !== cab.sha256.toLowerCase()) throw new Error(t('Empreinte SHA-256 différente de celle du catalogue : installation bloquée.'));
+          ops.push({ op: 'driver-cab-install', path: cab.path, sha256: cab.sha256 });
+        }
+        return ops;
+      },
+    });
+    return job;
+  }
+
+  async biosGuide(feature: BiosFeature): Promise<BiosGuide> {
+    const info = await readFirmwareInfo();
+    if (FAKE) Object.assign(info, { manufacturer: this.system.manufacturer, model: this.system.model, family: undefined, biosVendor: undefined, biosVersion: this.system.biosVersion, biosDate: this.system.biosDate });
+    return buildBiosGuide(info, feature);
+  }
+
+  /** Redémarrage vers les réglages UEFI, après suspension de BitLocker pour ce seul redémarrage si demandé. */
+  rebootToFirmware(suspendBitLocker: boolean): InstallJob {
+    const ops: ElevatedOp[] = suspendBitLocker ? [{ op: 'bitlocker-suspend' }, { op: 'reboot-firmware' }] : [{ op: 'reboot-firmware' }];
+    if (FAKE) return this.simulatedTask('setup', 'bios', [], ops.map((o) => o.op).join(', '));
+    return this.runElevatedTask('setup', 'bios', [], ops);
+  }
+
+  diskScan(): InstallJob {
+    const drive = process.env.SystemDrive ?? 'C:';
+    if (FAKE) return this.simulatedTask('setup', 'disk-scan', [], `chkdsk ${drive} /scan`);
+    return this.runElevatedTask('setup', 'disk-scan', [], [{ op: 'disk-scan', drive }]);
+  }
+
+  /** Mode démo : pas de processus administrateur (ni d'invite UAC), seulement une trace dans le journal. */
+  private simulatedTask(type: JobType, providerId: string, items: UpdateItem[], text: string): InstallJob {
+    const job = this.newJob(type, providerId, items, { simulated: true });
+    this.enqueue({
+      job,
+      runner: async (ctx) => {
+        ctx.log(`[simulation] ${text}`);
+        return { success: true };
+      },
+    });
+    return job;
   }
 
   hardware(force = false): Promise<HardwareInfo> {
@@ -918,6 +1040,7 @@ export class UpdateEngine extends EventEmitter {
 
   private invalidate(): void {
     this.invCache = undefined;
+    this.driversCache = undefined;
     this.hwCache = undefined;
   }
 

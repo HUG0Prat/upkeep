@@ -1,5 +1,6 @@
 import { powershellJson } from './exec';
 import { readArp } from './inventory';
+import { healthChecks, problemDevices, readHealth } from './health';
 import type { DiskInfo, GpuInfo, HardwareInfo, PeripheralInfo, SystemInfo, VendorTool } from '../../shared/types';
 
 interface RawHw {
@@ -93,7 +94,11 @@ export async function readGpus(): Promise<GpuInfo[]> {
 }
 
 export async function readHardware(sys: SystemInfo): Promise<HardwareInfo> {
-  const [raw, arp] = await Promise.all([powershellJson<RawHw>(HW_SCRIPT, { timeoutMs: 120_000 }), readArp().catch(() => [])]);
+  const [raw, arp, health] = await Promise.all([
+    powershellJson<RawHw>(HW_SCRIPT, { timeoutMs: 120_000 }),
+    readArp().catch(() => []),
+    readHealth().catch(() => undefined),
+  ]);
   const installed = (re: RegExp) => arp.some((a) => re.test(a.name));
   const toTool = (t: Omit<ToolDef, 'match'>): VendorTool => ({ name: t.tool, installed: installed(t.arp), wingetId: t.wingetId, url: t.url });
 
@@ -117,6 +122,7 @@ export async function readHardware(sys: SystemInfo): Promise<HardwareInfo> {
       charge: b.charge,
       onAc: b.status === 2 || b.status >= 6,
       health: b.design && b.full ? Math.round((b.full / b.design) * 100) : undefined,
+      cycles: health?.cycles || undefined,
     };
   }
 
@@ -129,5 +135,7 @@ export async function readHardware(sys: SystemInfo): Promise<HardwareInfo> {
     peripherals,
     battery,
     supportUrl: supportUrlFor(sys),
+    health: health && healthChecks(health, battery),
+    problemDevices: health && problemDevices(health),
   };
 }

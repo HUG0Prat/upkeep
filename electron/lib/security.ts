@@ -269,6 +269,8 @@ interface RawChecks {
   tpm: string;
   uac?: number;
   smartScreen?: string;
+  vtFirmware?: boolean;
+  hypervisor?: boolean;
 }
 
 const CHECKS_SCRIPT = String.raw`
@@ -280,6 +282,8 @@ $sb = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\SecureBoot\State
 if ($null -ne $sb) { $o.secureBoot = [int]$sb }
 $o.tpm = (tpmtool.exe getdeviceinformation 2>$null) -join "\n"
 $o.uac = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -ErrorAction SilentlyContinue).EnableLUA
+$o.vtFirmware = [bool](Get-CimInstance Win32_Processor | Select-Object -First 1).VirtualizationFirmwareEnabled
+$o.hypervisor = [bool](Get-CimInstance Win32_ComputerSystem).HypervisorPresent
 $o.smartScreen = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer' -ErrorAction SilentlyContinue).SmartScreenEnabled
 [pscustomobject]$o | ConvertTo-Json -Depth 4 -Compress`;
 
@@ -330,6 +334,7 @@ export async function securityChecks(system: SystemInfo): Promise<SecurityCheck[
     status: r.secureBoot === 1 ? 'ok' : r.secureBoot === 0 ? 'warn' : 'unknown',
     value: r.secureBoot === 1 ? t('activé') : r.secureBoot === 0 ? t('désactivé') : t('inconnu (BIOS hérité ?)'),
     advice: r.secureBoot === 0 ? t('Activable dans les réglages UEFI/BIOS ; protège contre les rootkits de démarrage.') : undefined,
+    bios: r.secureBoot === 1 ? undefined : 'secureboot',
   });
   const tpm = parseTpm(r.tpm ?? '');
   checks.push({
@@ -337,6 +342,18 @@ export async function securityChecks(system: SystemInfo): Promise<SecurityCheck[
     label: 'TPM',
     status: tpm.present ? (tpm.version?.startsWith('2') ? 'ok' : 'warn') : tpm.present === false ? 'bad' : 'unknown',
     value: tpm.present ? t('présent · version {v}', { v: tpm.version ?? '?' }) : tpm.present === false ? t('absent') : t('inconnu'),
+    advice: tpm.present === false ? t('La plupart des PC récents ont un TPM intégré au processeur, désactivé dans le BIOS (Intel PTT, AMD fTPM).') : undefined,
+    bios: tpm.present && tpm.version?.startsWith('2') ? undefined : 'tpm',
+  });
+  // Quand Hyper-V ou la sécurité basée sur la virtualisation tourne, Windows signale la virtualisation firmware comme inactive.
+  const vtOn = r.hypervisor || r.vtFirmware;
+  checks.push({
+    id: 'virtualization',
+    label: t('Virtualisation matérielle'),
+    status: vtOn ? 'ok' : r.vtFirmware === false ? 'warn' : 'unknown',
+    value: vtOn ? t('activée') : r.vtFirmware === false ? t('désactivée dans le BIOS') : t('inconnu'),
+    advice: vtOn ? undefined : t('Nécessaire à l’intégrité de la mémoire (VBS), WSL 2, Windows Sandbox et Hyper-V.'),
+    bios: vtOn ? undefined : 'virtualization',
   });
   checks.push({
     id: 'uac',

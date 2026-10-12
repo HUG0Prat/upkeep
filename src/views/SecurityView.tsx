@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { AppState, CheckStatus, SecurityReport } from '../../shared/types';
+import type { AppState, BiosFeature, BiosGuide, CheckStatus, SecurityReport } from '../../shared/types';
 import { t } from '../../shared/i18n';
-import { api, formatDate } from '../api';
+import { api, copyText, formatDate } from '../api';
 import { Icon, type IconName } from '../components/Icon';
+import { Modal } from '../components/ui';
 
 let memo: SecurityReport | null = null;
 
@@ -12,6 +13,7 @@ const STATUS_LABEL = (): Record<CheckStatus, string> => ({ ok: t('Correct'), war
 export function SecurityView({ state, go }: { state: AppState; go: (page: string) => void }) {
   const [report, setReport] = useState<SecurityReport | null>(memo);
   const [error, setError] = useState<string | null>(null);
+  const [bios, setBios] = useState<BiosFeature | null>(null);
   const load = (force = false) => {
     if (force) setReport(null);
     setError(null);
@@ -86,6 +88,11 @@ export function SecurityView({ state, go }: { state: AppState; go: (page: string
                   <td className="col-name">
                     {c.value}
                     {c.advice && <div className="muted small">{c.advice}</div>}
+                    {c.bios && c.status !== 'ok' && (
+                      <button className="btn small ghost" onClick={() => setBios(c.bios!)}>
+                        <Icon name="info" size={14} /> {t('Aide pour l’activer dans le BIOS')}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -131,6 +138,8 @@ export function SecurityView({ state, go }: { state: AppState; go: (page: string
         )}
       </section>
 
+      {bios && <BiosHelp feature={bios} onClose={() => setBios(null)} />}
+
       {sec.length > 0 && (
         <section>
           <h2 className="section-title">{t('Mises à jour de sécurité en attente')}</h2>
@@ -148,5 +157,110 @@ export function SecurityView({ state, go }: { state: AppState; go: (page: string
         </section>
       )}
     </div>
+  );
+}
+
+const FEATURE_TITLE = (): Record<BiosFeature, string> => ({
+  secureboot: t('Activer Secure Boot'),
+  tpm: t('Activer le TPM'),
+  virtualization: t('Activer la virtualisation matérielle'),
+});
+
+/** Procédure adaptée au BIOS détecté ; le redémarrage vers le BIOS n'est proposé qu'une fois la procédure lue. */
+function BiosHelp({ feature, onClose }: { feature: BiosFeature; onClose: () => void }) {
+  const [guide, setGuide] = useState<BiosGuide | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [read, setRead] = useState(false);
+  const [suspend, setSuspend] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [sent, setSent] = useState(false);
+  useEffect(() => {
+    api
+      .biosGuide(feature)
+      .then(setGuide)
+      .catch((e: Error) => setError(e.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, '')));
+  }, [feature]);
+  const title = FEATURE_TITLE()[feature];
+  const text = guide
+    ? [
+        title,
+        `${guide.machine} — BIOS ${guide.bios}`,
+        `${t('Accès au BIOS')} : ${guide.entry}`,
+        ...guide.steps.map((s, i) => `${i + 1}. ${s}`),
+        ...guide.warnings.map((w) => `! ${w}`),
+      ].join('\n')
+    : '';
+  const reboot = () => {
+    if (!guide) return;
+    setSent(true);
+    const p = guide.canRebootToFirmware ? api.rebootToBios(guide.bitlockerOn && suspend) : api.scheduleReboot(60);
+    p.catch((e: Error) => {
+      setSent(false);
+      setError(e.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, ''));
+    });
+  };
+  return (
+    <Modal title={title} wide cancelLabel={t('Fermer')} onCancel={onClose}>
+      {error && <pre className="error-box">{error}</pre>}
+      {!guide && !error && <p className="muted">{t('Lecture du BIOS…')}</p>}
+      {guide && (
+        <>
+          <dl className="detail-list">
+            <dt>{t('Ordinateur')}</dt>
+            <dd>{guide.machine}</dd>
+            <dt>BIOS</dt>
+            <dd>
+              <code>{guide.bios || '—'}</code> · {guide.firmwareType === 'UEFI' ? 'UEFI' : guide.firmwareType === 'Legacy' ? t('BIOS hérité (Legacy)') : t('mode inconnu')}
+            </dd>
+            <dt>{t('Accès au BIOS')}</dt>
+            <dd>{guide.entry}</dd>
+          </dl>
+          <ol className="steps">
+            {guide.steps.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ol>
+          {guide.warnings.map((w, i) => (
+            <p key={i} className="muted small">
+              <Icon name="alert" size={14} /> {w}
+            </p>
+          ))}
+          <div className="row wrap">
+            <button
+              className="btn small"
+              onClick={() =>
+                void copyText(text).then(() => {
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                })
+              }
+            >
+              <Icon name="copy" size={14} /> {copied ? t('Copié') : t('Copier la procédure')}
+            </button>
+            <button className="btn small ghost" onClick={() => void api.openExternal(guide.docsUrl)}>
+              <Icon name="external" size={14} /> {t('Documentation du constructeur')}
+            </button>
+          </div>
+          <p className="muted small">{t('UpKeep sera fermé pendant le redémarrage : notez ou photographiez ces étapes avant de continuer.')}</p>
+          <label className="row">
+            <input type="checkbox" checked={read} onChange={(e) => setRead(e.target.checked)} />
+            {t('J’ai lu la procédure et enregistré mon travail en cours')}
+          </label>
+          {guide.bitlockerOn && guide.canRebootToFirmware && (
+            <label className="row">
+              <input type="checkbox" checked={suspend} onChange={(e) => setSuspend(e.target.checked)} />
+              {t('Suspendre BitLocker pour ce redémarrage (recommandé)')}
+            </label>
+          )}
+          <div className="row end">
+            <button className="btn primary" disabled={!read || sent} onClick={reboot}>
+              <Icon name="power" size={14} />{' '}
+              {sent ? t('Redémarrage demandé…') : guide.canRebootToFirmware ? t('Redémarrer vers le BIOS') : t('Redémarrer dans 1 minute')}
+            </button>
+          </div>
+          {sent && guide.canRebootToFirmware && <p className="muted small">{t('Acceptez la demande d’autorisation administrateur : le PC redémarre 15 secondes plus tard.')}</p>}
+        </>
+      )}
+    </Modal>
   );
 }

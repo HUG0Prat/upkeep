@@ -1,6 +1,6 @@
 import { makeKey, type Provider } from './types';
 import { t } from '../../shared/i18n';
-import type { EolItem, PackageSearchResult, PackageSource, SecurityCheck, SystemInfo, UpdateItem, UpdateKind } from '../../shared/types';
+import type { DriverSearchResult, EolItem, PackageSearchResult, PackageSource, SecurityCheck, SystemInfo, UpdateItem, UpdateKind } from '../../shared/types';
 
 const now = Date.now();
 const day = 86_400_000;
@@ -102,6 +102,35 @@ export async function fakePackageSearch(query: string, sources: PackageSource[])
   return { results: FAKE_CATALOG.filter((r) => sources.includes(r.source) && `${r.name} ${r.id}`.toLowerCase().includes(q)), errors: {} };
 }
 
+const FAKE_DRIVERS: DriverSearchResult[] = [
+  {
+    id: '0b5b3c8e-1f2a-4c3d-9e8f-123456789abc',
+    title: 'Intel - Net - 23.110.0.5',
+    products: 'Windows 11 Client, version 24H2 and later, Servicing Drivers',
+    classification: 'Drivers (Networking)',
+    date: '9/2/2026',
+    version: '23.110.0.5',
+    size: '18.4 MB',
+    sizeBytes: 19293798,
+  },
+  {
+    id: '7c1d2e3f-4a5b-4c6d-8e9f-abcdef012345',
+    title: 'Realtek Semiconductor Corp. - Extension - 6.0.9800.1',
+    products: 'Windows 11 Client, version 22H2 and later, Servicing Drivers',
+    classification: 'Drivers (Sound)',
+    date: '7/14/2026',
+    version: '6.0.9800.1',
+    size: '512 KB',
+    sizeBytes: 524288,
+  },
+];
+
+export async function fakeDriverSearch(query: string): Promise<DriverSearchResult[]> {
+  await new Promise((r) => setTimeout(r, 300));
+  const q = query.trim().toLowerCase();
+  return FAKE_DRIVERS.filter((d) => `${d.title} ${d.classification}`.toLowerCase().includes(q));
+}
+
 export const FAKE_SYSTEM: Partial<SystemInfo> = {
   manufacturer: 'Contoso',
   model: 'Laptop 15',
@@ -117,6 +146,7 @@ export function fakeSecurityChecks(): SecurityCheck[] {
     { id: 'bitlocker', label: t('Chiffrement BitLocker du disque système'), status: 'ok', value: t('actif') },
     { id: 'secureboot', label: t('Démarrage sécurisé (Secure Boot)'), status: 'ok', value: t('actif') },
     { id: 'tpm', label: 'TPM', status: 'ok', value: t('présent · version {v}', { v: '2.0' }) },
+    { id: 'virtualization', label: t('Virtualisation matérielle'), status: 'warn', value: t('désactivée dans le BIOS'), bios: 'virtualization' },
     { id: 'uac', label: t('Contrôle de compte d’utilisateur (UAC)'), status: 'ok', value: t('actif') },
     { id: 'smartscreen', label: 'SmartScreen', status: 'ok', value: t('actif') },
   ];

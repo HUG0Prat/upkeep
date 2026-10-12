@@ -111,6 +111,24 @@ describe('moteur', () => {
     expect((await waitJob(retry.id)).status).toBe('success');
   });
 
+  it('relance une tâche dont l’élément n’est plus détecté', async () => {
+    const git = engine.getState().jobs.find((j) => j.items.some((i) => i.key === 'fake-pkg:Git.Git'));
+    expect(git).toBeDefined();
+    expect(engine.visibleUpdates().some((u) => u.key === 'fake-pkg:Git.Git')).toBe(false);
+    const [retry] = engine.retryJob(git!.id);
+    expect(retry.items[0].key).toBe('fake-pkg:Git.Git');
+    await waitJob(retry.id);
+  });
+
+  it('installe un pilote du catalogue et le relance', async () => {
+    const [r] = await engine.searchDrivers('intel');
+    const job = engine.installCatalogDriver(r);
+    expect((await waitJob(job.id)).status).toBe('success');
+    const [again] = engine.retryJob(job.id);
+    expect(again.providerId).toBe('driver-catalog');
+    expect((await waitJob(again.id)).status).toBe('success');
+  });
+
   it('résumé hebdomadaire', () => {
     const w = engine.weeklySummary();
     expect(w.installed.package).toBeGreaterThanOrEqual(1);

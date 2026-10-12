@@ -18,6 +18,10 @@ export type ElevatedOp =
   | { op: 'security-state' }
   | { op: 'cleanup-wu-cache' }
   | { op: 'driver-delete'; inf: string }
+  | { op: 'cleanup-system'; target: 'delivery-optimization' | 'system-temp' | 'system-crash' | 'component-store' | 'windows-old' }
+  | { op: 'driver-cab-install'; path: string; sha256: string }
+  | { op: 'reboot-firmware' }
+  | { op: 'disk-scan'; drive: string }
   | { op: 'simulate'; text: string };
 
 export interface OpsJob {
@@ -226,6 +230,83 @@ function Invoke-UkDriverDelete($inf) {
   if ($LASTEXITCODE) { "$inf est encore utilisé : conservé." }
 }
 
+function Remove-UkOldFiles($dir, $days) {
+  if (-not (Test-Path -LiteralPath $dir)) { return 0 }
+  $limit = (Get-Date).AddDays(-$days); $freed = 0
+  Get-ChildItem -LiteralPath $dir -Recurse -Force -File -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -lt $limit } | ForEach-Object {
+    $len = $_.Length
+    try { Remove-Item -LiteralPath $_.FullName -Force -ErrorAction Stop; $freed += $len } catch { }
+  }
+  Get-ChildItem -LiteralPath $dir -Recurse -Force -Directory -ErrorAction SilentlyContinue | Sort-Object { $_.FullName.Length } -Descending |
+    Where-Object { -not (Get-ChildItem -LiteralPath $_.FullName -Force -ErrorAction SilentlyContinue) } | Remove-Item -Force -ErrorAction SilentlyContinue
+  "{0} : {1:N0} Mo libérés" -f $dir, ($freed / 1MB)
+}
+
+function Invoke-UkCleanupSystem($target) {
+  switch ($target) {
+    'delivery-optimization' { Delete-DeliveryOptimizationCache -Force -ErrorAction Stop; 'Cache d''optimisation de la distribution vidé.' }
+    'system-temp' { Remove-UkOldFiles (Join-Path $env:SystemRoot 'Temp') 1 }
+    'system-crash' {
+      foreach ($d in (Join-Path $env:SystemRoot 'Minidump'), (Join-Path $env:SystemRoot 'LiveKernelReports'), (Join-Path $env:ProgramData 'Microsoft\Windows\WER')) { Remove-UkOldFiles $d 0 }
+      $dmp = Join-Path $env:SystemRoot 'MEMORY.DMP'
+      if (Test-Path -LiteralPath $dmp) { Remove-Item -LiteralPath $dmp -Force -ErrorAction SilentlyContinue; 'MEMORY.DMP supprimé.' }
+    }
+    'component-store' {
+      'Nettoyage du magasin de composants (DISM), cela peut durer plusieurs minutes…'
+      Dism.exe /Online /Cleanup-Image /StartComponentCleanup /NoRestart
+      if ($LASTEXITCODE -eq 3010) { $REBOOT } elseif ($LASTEXITCODE) { $global:JobExitCode = $LASTEXITCODE }
+    }
+    'windows-old' {
+      $old = Join-Path $env:SystemDrive 'Windows.old'
+      if (-not (Test-Path -LiteralPath $old)) { 'Windows.old est déjà supprimé.'; return }
+      'Prise de possession de Windows.old…'
+      takeown.exe /F $old /R /A /D O | Out-Null
+      icacls.exe $old /grant '*S-1-5-32-544:F' /T /C /Q | Out-Null
+      Remove-Item -LiteralPath $old -Recurse -Force -ErrorAction SilentlyContinue
+      if (Test-Path -LiteralPath $old) { 'Certains fichiers de Windows.old n''ont pas pu être supprimés.'; $global:JobExitCode = 1 } else { 'Windows.old supprimé.' }
+    }
+    default { throw "Nettoyage refusé : $target" }
+  }
+}
+
+function Invoke-UkDriverCab($path, $sha) {
+  Assert-Match $sha '^[0-9a-fA-F]{64}$' 'empreinte SHA-256'
+  if ("$path" -notmatch '\.cab$' -or -not (Test-Path -LiteralPath $path)) { throw "Paquet de pilote introuvable : $path" }
+  $safe = Join-Path $env:ProgramData 'UpKeep\drivers'; New-Item -ItemType Directory -Force $safe | Out-Null
+  $name = [IO.Path]::GetFileNameWithoutExtension($path) -replace '[^\w.-]', '_'
+  $cab = Join-Path $safe "$name.cab"; $dir = Join-Path $safe $name
+  Copy-Item -LiteralPath $path -Destination $cab -Force
+  if ((Get-FileHash -LiteralPath $cab -Algorithm SHA256).Hash -ne $sha.ToUpper()) { throw 'Empreinte SHA-256 différente : installation bloquée.' }
+  $sig = Get-AuthenticodeSignature -LiteralPath $cab
+  if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') { throw "Signature invalide ou éditeur inattendu ($($sig.Status)) : installation bloquée." }
+  "Signature vérifiée : " + $sig.SignerCertificate.Subject
+  if (Test-Path -LiteralPath $dir) { Remove-Item -LiteralPath $dir -Recurse -Force }
+  New-Item -ItemType Directory -Force $dir | Out-Null
+  expand.exe -F:* $cab $dir | Out-Null
+  $infs = @(Get-ChildItem -LiteralPath $dir -Recurse -Filter *.inf)
+  if (-not $infs.Count) { throw 'Aucun fichier .inf dans le paquet.' }
+  "Installation de $($infs.Count) fichier(s) .inf…"
+  pnputil.exe /add-driver (Join-Path $dir '*.inf') /subdirs /install
+  $code = $LASTEXITCODE
+  Remove-Item -LiteralPath $cab -Force -ErrorAction SilentlyContinue
+  if ($code -eq 3010) { $REBOOT }
+  elseif ($code -eq 259) { 'Pilote ajouté au magasin, mais aucun périphérique présent ne l''utilise (ou un pilote plus récent est déjà installé).' }
+  elseif ($code) { $global:JobExitCode = $code }
+}
+
+function Invoke-UkRebootFirmware {
+  if ("$env:firmware_type" -ne 'UEFI') { throw 'Redémarrage vers le firmware impossible : PC en mode BIOS hérité.' }
+  shutdown.exe /r /fw /t 15 /c 'UpKeep : redémarrage vers les réglages UEFI dans 15 secondes.'
+  if ($LASTEXITCODE) { $global:JobExitCode = $LASTEXITCODE } else { 'Redémarrage vers les réglages UEFI dans 15 secondes.' }
+}
+
+function Invoke-UkDiskScan($drive) {
+  Assert-Match $drive '^[A-Za-z]:$' 'lecteur'
+  "Analyse en ligne de $drive (chkdsk /scan, sans redémarrage)…"
+  chkdsk.exe $drive /scan
+  if ($LASTEXITCODE -ge 3) { $global:JobExitCode = $LASTEXITCODE; "Des erreurs ont été trouvées : lancez « chkdsk $drive /f » puis redémarrez pour les réparer." }
+}
+
 function Invoke-UkOp($o) {
   switch ($o.op) {
     'wu-install' { Invoke-UkWuInstall $o.type @($o.ids) ([bool]$o.downloadOnly) }
@@ -245,6 +326,10 @@ function Invoke-UkOp($o) {
     'security-state' { Invoke-UkSecurityState }
     'cleanup-wu-cache' { Invoke-UkCleanupWuCache }
     'driver-delete' { Invoke-UkDriverDelete $o.inf }
+    'cleanup-system' { Invoke-UkCleanupSystem $o.target }
+    'driver-cab-install' { Invoke-UkDriverCab $o.path $o.sha256 }
+    'reboot-firmware' { Invoke-UkRebootFirmware }
+    'disk-scan' { Invoke-UkDiskScan $o.drive }
     'simulate' { "[simulation] " + $o.text }
     default { throw "Opération inconnue : $($o.op)" }
   }

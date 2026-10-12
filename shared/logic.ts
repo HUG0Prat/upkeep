@@ -171,3 +171,8 @@ export function csvEscape(v: unknown): string {
   const s = v === undefined || v === null ? '' : String(v);
   return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
+
+/** Identifiant matériel utilisable dans le catalogue Microsoft Update : sans sous-système, révision ni interface. */
+export function catalogHardwareId(hwid: string): string {
+  return hwid.replace(/&(SUBSYS|REV|CC)_[0-9A-F]+/gi, '').replace(/&MI_[0-9A-F]+$/i, '');
+}

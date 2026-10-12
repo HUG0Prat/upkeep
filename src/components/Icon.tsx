@@ -36,6 +36,8 @@ const PATHS = {
   terminal: 'M4 5h16v14H4zm3 4 3 3-3 3m5 0h5',
   plus: 'M12 5v14M5 12h14',
   trash: 'M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13',
+  usb: 'M12 3v14m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0-4-4-3V7m4 6 4-2V8M7 5h2v2H7zm9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z',
+  heart: 'M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9Z',
 } as const;
 
 export type IconName = keyof typeof PATHS;

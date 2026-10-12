@@ -115,8 +115,14 @@ describe.runIf(process.platform === 'win32')('opérations administrateur', () =>
         { id: 'b', ops: [{ op: 'choco-upgrade', id: 'x; Remove-Item C:\\' }] },
         { id: 'c', ops: [{ op: 'driver-delete', inf: '..\\..\\windows.inf' }] },
         { id: 'd', ops: [{ op: 'simulate', text: 'ok' }] },
+        { id: 'e', ops: [{ op: 'cleanup-system', target: 'windows-old; Remove-Item C:' as never }] },
+        { id: 'f', ops: [{ op: 'driver-cab-install', path: 'x.cab', sha256: 'pas-une-empreinte' }] },
+        { id: 'g', ops: [{ op: 'disk-scan', drive: 'C: /f /x' }] },
       ]),
     );
+    expect(r.stdout).toMatch(/@@JOB e END 1/);
+    expect(r.stdout).toMatch(/@@JOB f END 1/);
+    expect(r.stdout).toMatch(/@@JOB g END 1/);
     expect(r.stdout).toMatch(/@@JOB a END 1/);
     expect(r.stdout).toMatch(/@@JOB b END 1/);
     expect(r.stdout).toMatch(/@@JOB c END 1/);

@@ -29,7 +29,8 @@ import { SelfUpdater, selfUpdateMode } from './updater';
 import { normalizeName } from '../shared/logic';
 import { resolveLang, setLang, t } from '../shared/i18n';
 import type { InstallOptions } from './engine';
-import type { PackageSearchResult, PackageSource, Settings, UpdateItem, WeeklySummary } from '../shared/types';
+import type { BiosFeature, DriverSearchResult, PackageSearchResult, PackageSource, Settings, UpdateItem, WeeklySummary } from '../shared/types';
+import { run } from './lib/exec';
 
 if (process.env.UPKEEP_GPU !== '1') app.disableHardwareAcceleration();
 
@@ -362,7 +363,11 @@ function registerIpc(): void {
   h('item:versions', (_e, key: string) => engine.listVersions(key));
   h('job:cancel', (_e, id: string) => engine.cancelJob(id));
   h('job:log', (_e, id: string) => engine.jobLog(id));
-  h('job:retry', (_e, id: string) => engine.retryJob(id).map((j) => j.id));
+  h('job:retry', async (_e, id: string) => {
+    const src = engine.getState().jobs.find((j) => j.id === id);
+    if (src && src.type !== 'download') await engine.firmwareGuard(src.items);
+    return engine.retryJob(id).map((j) => j.id);
+  });
   h('devices:forget', (_e, keys: string[]) => engine.forgetDevices(keys));
   h('devices:forgetAll', () => engine.forgetAllAbsent());
   h('security:get', (_e, force?: boolean) => engine.security(force));
@@ -388,7 +393,9 @@ function registerIpc(): void {
   });
   h('job:move', (_e, id: string, delta: -1 | 1) => engine.moveJob(id, delta));
   h('job:rollback', (_e, id: string) => engine.rollback(id).map((j) => j.id));
-  h('job:driverRollback', (_e, id: string, key: string) => engine.driverRollback(id, key));
+  h('job:driverRollback', (_e, id: string, key: string) => {
+    engine.driverRollback(id, key);
+  });
   h('history:clear', () => engine.clearHistory());
   h('history:csv', async (_e, ids?: string[]) => saveDialog(`upkeep-historique-${new Date().toISOString().slice(0, 10)}.csv`, [{ name: 'CSV', extensions: ['csv'] }], engine.historyCsv(ids)));
   h('history:stats', () => engine.monthlyStats());
@@ -408,6 +415,40 @@ function registerIpc(): void {
   );
   h('inventory:track', (_e, name: string, id: string | null) => engine.trackProgram(name, id));
   h('hardware:get', (_e, force?: boolean) => engine.hardware(force));
+  h('hardware:ports', () => engine.ports());
+  h('hardware:diskScan', () => {
+    engine.diskScan();
+  });
+  h('hardware:memoryTest', () => shell.openPath(join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'mdsched.exe')));
+  h('hardware:batteryReport', async () => {
+    const out = join(app.getPath('temp'), 'upkeep-battery-report.html');
+    const r = await run('powercfg.exe', ['/batteryreport', '/output', out], { timeoutMs: 60_000 });
+    if (r.code !== 0) throw new Error((r.stderr || r.stdout).trim() || t('Rapport de batterie indisponible.'));
+    await shell.openPath(out);
+  });
+  h('drivers:list', (_e, force?: boolean) => engine.drivers(force));
+  h('drivers:search', (_e, q: string) => engine.searchDrivers(String(q)));
+  h('drivers:install', (_e, r: DriverSearchResult) => {
+    if (!r || !/^[0-9a-f-]{36}$/i.test(String(r.id))) throw new Error(t('Identifiant de mise à jour invalide.'));
+    const clean = (v: unknown, n = 200) => String(v ?? '').slice(0, n);
+    return engine.installCatalogDriver({
+      id: String(r.id).toLowerCase(),
+      title: clean(r.title),
+      products: clean(r.products),
+      classification: clean(r.classification, 100),
+      date: clean(r.date, 20),
+      version: clean(r.version, 64),
+      size: clean(r.size, 20),
+      sizeBytes: Number(r.sizeBytes) || undefined,
+    }).id;
+  });
+  h('bios:guide', (_e, feature: BiosFeature) => {
+    if (!['secureboot', 'tpm', 'virtualization'].includes(feature)) throw new Error('Réglage inconnu');
+    return engine.biosGuide(feature);
+  });
+  h('bios:reboot', (_e, suspendBitLocker: boolean) => {
+    engine.rebootToFirmware(!!suspendBitLocker);
+  });
   h('icons:get', (_e, names: string[]) => iconsFor(names));
   h('profile:set', (_e, id: string) => engine.setActiveProfile(id));
   h('helper:set', (_e, enabled: boolean) => engine.setHelper(enabled));

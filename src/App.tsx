@@ -173,7 +173,7 @@ export default function App() {
           {page === 'updates' && <UpdatesView state={state} focus={focus} onShowActivity={() => go('history')} />}
           {page === 'security' && <SecurityView state={state} go={go} />}
           {page === 'search' && <PackageSearchView state={state} go={go} />}
-          {page === 'inventory' && <InventoryView state={state} />}
+          {page === 'inventory' && <InventoryView state={state} go={go} />}
           {page === 'hardware' && <HardwareView state={state} />}
           {page === 'maintenance' && <MaintenanceView state={state} />}
           {page === 'history' && <HistoryView state={state} />}

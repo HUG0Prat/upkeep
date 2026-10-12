@@ -43,24 +43,40 @@ export function MaintenanceView({ state }: { state: AppState }) {
         </div>
       </header>
 
-      <section className="settings">
-        {(items ?? []).map((i) => (
-          <div key={i.id} className="setting">
-            <div>
-              <div>
-                {i.label} {i.requiresAdmin && <span className="tag">admin</span>}
+      {(
+        [
+          [false, t('Votre session')],
+          [true, t('Système (droits administrateur)')],
+        ] as [boolean, string][]
+      ).map(([admin, title]) => (
+        <section key={title} className="settings">
+          <h2 className="section-title">{title}</h2>
+          {(items ?? [])
+            .filter((i) => i.requiresAdmin === admin)
+            .map((i) => (
+              <div key={i.id} className="setting">
+                <div>
+                  <div>
+                    {i.label} {i.requiresAdmin && <span className="tag">admin</span>}
+                  </div>
+                  <div className="muted small">{i.description}</div>
+                </div>
+                <div className="row">
+                  <span className="muted small nowrap">
+                    {i.count !== undefined ? t('{n} élément(s)', { n: i.count }) : i.sizeUnknown ? t('taille inconnue') : formatSize(i.sizeBytes) || t('vide')}
+                  </span>
+                  <button className="btn small" disabled={!(i.sizeBytes || i.count || i.sizeUnknown)} onClick={() => setConfirm(i)}>
+                    <Icon name="trash" size={14} /> {t('Nettoyer')}
+                  </button>
+                </div>
               </div>
-              <div className="muted small">{i.description}</div>
-            </div>
-            <div className="row">
-              <span className="muted small nowrap">{i.count !== undefined ? t('{n} élément(s)', { n: i.count }) : formatSize(i.sizeBytes) || t('vide')}</span>
-              <button className="btn small" disabled={!(i.sizeBytes || i.count)} onClick={() => setConfirm(i)}>
-                <Icon name="trash" size={14} /> {t('Nettoyer')}
-              </button>
-            </div>
-          </div>
-        ))}
-        {!items && <div className="setting muted">{t('Analyse en cours…')}</div>}
+            ))}
+          {!items && <div className="setting muted">{t('Analyse en cours…')}</div>}
+        </section>
+      ))}
+
+      <section className="settings">
+        <h2 className="section-title">{t('Périphériques')}</h2>
         <div className="setting">
           <div>
             <div>{t('Périphériques absents mémorisés')}</div>

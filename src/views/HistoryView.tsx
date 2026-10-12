@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AppState, InstallJob, JobStatus, MonthlyStat } from '../../shared/types';
 import { t } from '../../shared/i18n';
 import { api, copyText, formatDate } from '../api';
 import { Icon } from '../components/Icon';
-import { Modal } from '../components/ui';
+import { Modal, Toast } from '../components/ui';
 import { MonthlyChart } from '../components/MonthlyChart';
 
 const STATUS = (): Record<JobStatus, { label: string; cls: string }> => ({
@@ -59,7 +59,17 @@ export function HistoryView({ state }: { state: AppState }) {
   const [confirm, setConfirm] = useState<{ title: string; text: string; run: () => void } | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [limit, setLimit] = useState(PAGE_SIZE);
-  const providerName = (id: string) => state.providers.find((p) => p.id === id)?.name ?? (id === 'helper' ? t('Assistant administrateur') : id === 'packages' ? t('Liste des paquets') : id);
+  const [toast, setToast] = useState<string | null>(null);
+  const closeToast = useCallback(() => setToast(null), []);
+  const OTHER_SOURCES: Record<string, string> = {
+    helper: t('Assistant administrateur'),
+    packages: t('Liste des paquets'),
+    'driver-catalog': t('Catalogue Microsoft Update'),
+    bios: 'BIOS / UEFI',
+    'disk-scan': t('Vérification du disque'),
+    cleanup: t('Nettoyage'),
+  };
+  const providerName = (id: string) => state.providers.find((p) => p.id === id)?.name ?? OTHER_SOURCES[id] ?? id;
   const S = STATUS();
 
   const doneCount = state.jobs.filter((j) => j.status === 'success').length;
@@ -173,7 +183,16 @@ export function HistoryView({ state }: { state: AppState }) {
                       </button>
                     )}
                     {['failed', 'cancelled', 'interrupted'].includes(j.status) && j.items.length > 0 && (
-                      <button className="btn small ghost" onClick={() => void api.retryJob(j.id)}>
+                      <button className="btn small ghost" onClick={() =>
+                          api
+                            .retryJob(j.id)
+                            .then((ids) => {
+                              setToast(ids.length ? t('Tâche relancée.') : t('Rien à relancer pour cette tâche.'));
+                              if (ids[0]) setOpen(ids[0]);
+                            })
+                            .catch((err: Error) => setToast(err.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, '')))
+                        }
+                      >
                         <Icon name="refresh" size={14} /> {t('Réessayer')}
                       </button>
                     )}
@@ -263,6 +282,7 @@ export function HistoryView({ state }: { state: AppState }) {
         </div>
       )}
 
+      {toast && <Toast text={toast} onClose={closeToast} />}
       {confirm && (
         <Modal
           title={confirm.title}

@@ -184,6 +184,47 @@ test('recherche et installation de logiciels', async () => {
   await expect(page.locator('.log').first()).toContainText('Installation de VLC media player', { timeout: 15_000 });
 });
 
+test('recherche et installation de pilotes', async () => {
+  await nav(/Rechercher/);
+  await page.getByRole('tab', { name: 'Pilotes' }).click();
+  await expect(page.locator('.view h1', { hasText: 'Rechercher des pilotes' })).toBeVisible();
+  const input = page.getByRole('textbox', { name: 'Pilote à rechercher' });
+  await input.fill('intel');
+  await input.press('Enter');
+  const results = page.getByRole('table', { name: 'Pilotes trouvés' });
+  await results.locator('tr', { hasText: 'Intel - Net' }).getByRole('button', { name: 'Installer (admin)' }).click();
+  await page.getByRole('dialog', { name: 'Installer ce pilote ?' }).getByRole('button', { name: 'Installer' }).click();
+  await expect(page.locator('.toast')).toContainText('ajoutée à la file');
+  await page.getByRole('tab', { name: 'Logiciels' }).click();
+  await expect(page.locator('.view h1', { hasText: 'Rechercher des logiciels' })).toBeVisible();
+});
+
+test('activité : installation du pilote simulée en mode démo', async () => {
+  await nav(/Activité/);
+  const job = page.locator('.job', { hasText: 'Intel - Net' }).first();
+  await expect(job.locator('.status.ok')).toBeVisible({ timeout: 15_000 });
+  await expect(job).toContainText('Catalogue Microsoft Update');
+});
+
+test('aide BIOS : procédure avant le redémarrage', async () => {
+  await nav(/Sécurité/);
+  await page.getByRole('button', { name: 'Aide pour l’activer dans le BIOS' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Activer la virtualisation matérielle' });
+  await expect(dialog.locator('.steps li').first()).toBeVisible({ timeout: 30_000 });
+  const reboot = dialog.getByRole('button', { name: /Redémarrer/ });
+  await expect(reboot).toBeDisabled();
+  await dialog.getByRole('checkbox', { name: /J’ai lu la procédure/ }).check();
+  await expect(reboot).toBeEnabled();
+  await dialog.getByRole('button', { name: 'Fermer' }).click();
+  await expect(dialog).toHaveCount(0);
+});
+
+test('inventaire des pilotes', async () => {
+  await nav(/Inventaire/);
+  await page.getByRole('tab', { name: /Pilotes/ }).click();
+  await expect(page.getByRole('table', { name: 'Pilotes installés' })).toBeVisible({ timeout: 60_000 });
+});
+
 test('traduction anglaise', async () => {
   await nav(/Paramètres/);
   await page.getByRole('tab', { name: 'Apparence' }).click();
