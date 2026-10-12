@@ -40,6 +40,7 @@ UpKeep only contacts **public** services, **without any identifier**, to learn t
 | Google, Microsoft Edge, Mozilla (release pages) | browsers | nothing |
 | api.github.com, github.com | release notes, WSL versions, new UpKeep versions (self-update can be turned off in *Settings*) | repository name, UpKeep version |
 | Scoop buckets, community.chocolatey.org | software search (*Search* page), Chocolatey updates | the search terms you type |
+| catalog.update.microsoft.com, download.windowsupdate.com | driver search and installation (*Search › Drivers*) | the model or hardware ID you search for |
 | hub.docker.com | Docker images | image names |
 
 None of these requests contains a personal or machine identifier. As with any Internet connection, these services see your IP address and are governed by their own privacy policies.

@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-12
+
+### Added
+
+- **Driver inventory**: *Inventory › Drivers* lists the driver of every device (version, date, provider, .inf, status), with filters for built-in Microsoft drivers and devices in error.
+- **Driver search**: *Search › Drivers* queries the Microsoft Update Catalog by model or hardware ID, or from a device of the PC. Each package is checked against the SHA-256 published by the catalog and Microsoft's signature, then installed with `pnputil` (administrator).
+- **Ports**: *Hardware* shows USB ports (free, in use, faulty: overcurrent, failed enumeration, insufficient power, code 43), USB-C and USB 3 connectors, Ethernet and connected displays, plus a guided USB port test.
+- **Component health**: disks, disk and WHEA hardware errors, unexpected shutdowns, last memory test, battery wear and cycles, temperature when exposed, devices in error; online disk check (`chkdsk /scan`), Windows Memory Diagnostic and battery report.
+- **BIOS help**: *Security* checks hardware virtualization and offers manufacturer-specific steps to enable Secure Boot, TPM or virtualization, then restarts into UEFI settings (BitLocker suspended for that restart) once the steps have been read.
+- **Cleanup**: temporary files, Recycle Bin, browser caches, thumbnails, error reports and crash dumps, Delivery Optimization, `Windows\Temp`, memory dumps, DISM component store and `Windows.old`, grouped by session and system.
+
+### Fixed
+
+- *Activity*: *Retry* did nothing when the items of the task were no longer detected (after a new check or a restart). It now restarts the task from its own items and reports errors.
+
 ## [1.1.0] - 2026-10-08
 
 ### Added
@@ -75,7 +90,8 @@ First public release.
 
 - Guided multilingual installer (per-user or all users, folder, desktop shortcut), portable executable, MSI, MSIX/AppX, ZIP and 7z, for x64 and ARM64, with SHA-256 checksums.
 
-[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/HUG0Prat/upkeep/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/HUG0Prat/upkeep/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/HUG0Prat/upkeep/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/HUG0Prat/upkeep/releases/tag/v1.0.0

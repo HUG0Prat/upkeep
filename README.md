@@ -97,7 +97,8 @@ UpKeep brings them together:
 - Actively exploited vulnerabilities (CISA KEV)
 - Known vulnerabilities of developer packages (OSV) and common desktop apps (NVD)
 - End of support for Windows, Python, Node.js, .NET, Java… (endoflife.date)
-- PC status: Defender, firewall, BitLocker, Secure Boot, TPM, UAC, SmartScreen
+- PC status: Defender, firewall, BitLocker, Secure Boot, TPM, hardware virtualization, UAC, SmartScreen
+- Step-by-step help to enable Secure Boot, TPM or virtualization in the BIOS for your PC's manufacturer, then restart into UEFI
 - Downloaded installers verified (SHA-256, Authenticode signature, expected publisher)
 
 </td><td valign="top">
@@ -106,9 +107,10 @@ UpKeep brings them together:
 - Dashboard, global search (<kbd>Ctrl</kbd>+<kbd>K</kbd>), keyboard shortcuts
 - Actionable Windows notifications (*Update*, *Later*, *Ignore*) and a weekly summary
 - Profiles, wildcard rules, quarantine, per-package options
-- Find and install software from WinGet, Microsoft Store, Scoop and Chocolatey
-- Inventory of installed software, hardware sheet, history with CSV export
-- Cleanup of superseded drivers and caches; forget absent devices
+- Find and install software from WinGet, Microsoft Store, Scoop and Chocolatey, and drivers from the Microsoft Update Catalog
+- Inventory of installed software and drivers, hardware sheet, history with CSV export
+- Component health (disks, memory, battery, hardware errors, faulty devices) and USB, Ethernet and display ports with a guided USB port test
+- Cleanup of superseded drivers, caches, temporary files, Recycle Bin, crash dumps, DISM component store and Windows.old; forget absent devices
 - Export and re-import your package list on another PC
 - Updates itself from GitHub releases (installed version; other formats are notified)
 
@@ -162,7 +164,7 @@ Every release provides the following packages for **x64** and **ARM64** (replace
 Check downloads against `SHA256SUMS.txt`:
 
 ```powershell
-Get-FileHash .\UpKeep-1.1.0-x64-setup.exe -Algorithm SHA256
+Get-FileHash .\UpKeep-1.2.0-x64-setup.exe -Algorithm SHA256
 ```
 
 ### Installer
@@ -184,7 +186,7 @@ Run `UpKeep-<version>-<arch>-portable.exe` from anywhere. Settings and history a
 ### MSI
 
 ```powershell
-msiexec /i UpKeep-1.1.0-x64.msi /qn
+msiexec /i UpKeep-1.2.0-x64.msi /qn
 ```
 
 ### MSIX / AppX
@@ -192,7 +194,7 @@ msiexec /i UpKeep-1.1.0-x64.msi /qn
 The package is not signed by a trusted publisher yet. On Windows 11, turn on *Developer Mode*, then:
 
 ```powershell
-Add-AppxPackage .\UpKeep-1.1.0-x64.appx -AllowUnsigned
+Add-AppxPackage .\UpKeep-1.2.0-x64.appx -AllowUnsigned
 ```
 
 ### winget

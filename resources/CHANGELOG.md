@@ -1,3 +1,16 @@
+1.2.0 — 12/10/2026
+
+Nouveautés
+- Inventaire › Pilotes : le pilote de chaque périphérique (version, date, fournisseur, état), avec filtres pour les pilotes Microsoft intégrés et les périphériques en erreur.
+- Recherche › Pilotes : recherche dans le catalogue Microsoft Update par modèle, identifiant matériel ou périphérique du PC. Chaque pilote est vérifié (empreinte SHA-256 du catalogue, signature Microsoft) avant installation.
+- Matériel › Ports : ports USB libres, occupés ou défaillants (surintensité, échec de reconnaissance, alimentation insuffisante, code 43), USB-C et USB 3, Ethernet et écrans branchés, avec un test guidé des ports USB.
+- Matériel › Santé des composants : disques, erreurs disque et matérielles, arrêts brutaux, dernier test mémoire, usure et cycles de la batterie, périphériques en erreur ; vérification du disque, diagnostic mémoire et rapport de batterie.
+- Sécurité : contrôle de la virtualisation matérielle et aide pas à pas pour activer Secure Boot, TPM ou virtualisation dans le BIOS selon le constructeur, puis redémarrage vers les réglages UEFI une fois la procédure lue.
+- Maintenance : fichiers temporaires, Corbeille, caches des navigateurs et des miniatures, rapports d'erreurs, vidages mémoire, optimisation de la distribution, composants Windows remplacés et Windows.old.
+
+Corrections
+- Activité : « Réessayer » ne relançait rien quand les éléments de la tâche n'étaient plus détectés (après une revérification ou un redémarrage).
+
 1.1.0 — 08/10/2026
 
 Nouveautés
