@@ -23,7 +23,7 @@
   "dependencies": {
     "electron-updater": "^6.8.9",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
