@@ -21,7 +21,7 @@
     "release:notes": "node scripts/release-notes.mjs"
   },
   "dependencies": {
-    "electron-updater": "^6.8.9",
+    "electron-updater": "^6.8.11",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
