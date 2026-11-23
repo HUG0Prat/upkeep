@@ -29,6 +29,23 @@ export interface OpsJob {
   ops: ElevatedOp[];
 }
 
+/**
+ * Éditeurs attendus, vérifiés sur le champ O= (organisation) du certificat Authenticode et non plus sur une
+ * simple sous-chaîne du sujet : « /HP/i » acceptait par exemple « CN=PHP Group » ou « O=Dellwood Ltd ».
+ * Même source pour le contrôle côté application (gpu.ts, oem.ts) et côté processus administrateur.
+ */
+export const SIGNER_PATTERNS = {
+  nvidia: String.raw`(^|,\s*)O="?NVIDIA Corporation"?(,|$)`,
+  asus: String.raw`(^|,\s*)O="?ASUSTeK COMPUTER INC\.?"?(,|$)`,
+  dell: String.raw`(^|,\s*)O="?Dell (Inc|Technologies Inc)\.?"?(,|$)`,
+  hp: String.raw`(^|,\s*)O="?(HP Inc\.?|Hewlett[- ]Packard Company)"?(,|$)`,
+  microsoft: String.raw`(^|,\s*)O="?Microsoft Corporation"?(,|$)`,
+} as const;
+
+export function signerRegex(vendor: keyof typeof SIGNER_PATTERNS): RegExp {
+  return new RegExp(SIGNER_PATTERNS[vendor], 'i');
+}
+
 export const OPS_LIBRARY = String.raw`
 $REBOOT = 'REDÉMARRAGE REQUIS'
 $ReGuid = '^[0-9a-fA-F-]{36}$'
@@ -158,10 +175,10 @@ function Invoke-UkHp($cats) {
 }
 
 $Installers = @{
-  nvidia = @{ Signer = 'NVIDIA Corporation'; Args = @('-s', '-noreboot', '-noeula'); Interactive = $false }
-  asus   = @{ Signer = 'ASUSTeK'; Args = @(); Interactive = $true }
-  dell   = @{ Signer = 'Dell'; Args = @('/s'); Interactive = $false }
-  hp     = @{ Signer = 'HP Inc'; Args = @('/s'); Interactive = $false }
+  nvidia = @{ Signer = '${SIGNER_PATTERNS.nvidia}'; Args = @('-s', '-noreboot', '-noeula'); Interactive = $false }
+  asus   = @{ Signer = '${SIGNER_PATTERNS.asus}'; Args = @(); Interactive = $true }
+  dell   = @{ Signer = '${SIGNER_PATTERNS.dell}'; Args = @('/s'); Interactive = $false }
+  hp     = @{ Signer = '${SIGNER_PATTERNS.hp}'; Args = @('/s'); Interactive = $false }
 }
 
 function Invoke-UkInstaller($vendor, $path, $sha) {
@@ -173,7 +190,7 @@ function Invoke-UkInstaller($vendor, $path, $sha) {
   Copy-Item -LiteralPath $path -Destination $dest -Force
   if ((Get-FileHash -LiteralPath $dest -Algorithm SHA256).Hash -ne $sha.ToUpper()) { throw 'Empreinte SHA-256 différente : installation bloquée.' }
   $sig = Get-AuthenticodeSignature -LiteralPath $dest
-  if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch [regex]::Escape($def.Signer)) { throw "Signature invalide ou éditeur inattendu ($($sig.Status)) : installation bloquée." }
+  if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch $def.Signer) { throw "Signature invalide ou éditeur inattendu ($($sig.Status)) : installation bloquée." }
   "Signature vérifiée : " + $sig.SignerCertificate.Subject
   $p = if ($def.Interactive) { Start-Process -FilePath $dest -Wait -PassThru } else { Start-Process -FilePath $dest -ArgumentList $def.Args -Wait -PassThru }
   "Code de sortie : $($p.ExitCode)"
@@ -278,7 +295,7 @@ function Invoke-UkDriverCab($path, $sha) {
   Copy-Item -LiteralPath $path -Destination $cab -Force
   if ((Get-FileHash -LiteralPath $cab -Algorithm SHA256).Hash -ne $sha.ToUpper()) { throw 'Empreinte SHA-256 différente : installation bloquée.' }
   $sig = Get-AuthenticodeSignature -LiteralPath $cab
-  if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') { throw "Signature invalide ou éditeur inattendu ($($sig.Status)) : installation bloquée." }
+  if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch '${SIGNER_PATTERNS.microsoft}') { throw "Signature invalide ou éditeur inattendu ($($sig.Status)) : installation bloquée." }
   "Signature vérifiée : " + $sig.SignerCertificate.Subject
   if (Test-Path -LiteralPath $dir) { Remove-Item -LiteralPath $dir -Recurse -Force }
   New-Item -ItemType Directory -Force $dir | Out-Null

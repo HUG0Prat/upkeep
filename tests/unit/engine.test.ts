@@ -104,6 +104,23 @@ describe('moteur', () => {
     expect(batches[0].flatMap((j) => j.ops.map((o) => o.op))).not.toContain('restore-point');
   });
 
+  it('tâche automatique sans assistant : aucune fenêtre UAC', async () => {
+    let calls = 0;
+    const previous = engine.queue.elevatedRunner;
+    engine.queue.elevatedRunner = async (jobs, opts) => {
+      calls++;
+      return previous(jobs, opts);
+    };
+    const job: InstallJob = { id: 'auto-uac', type: 'install', providerId: 'fake-sys', items: [], status: 'queued', queuedAt: Date.now(), log: [], auto: true, elevated: true };
+    const finished = new Promise<void>((resolve) => engine.once('job-done', () => resolve()));
+    engine.queue.enqueue({ job, unattended: true, elevated: async () => [{ op: 'cleanup-wu-cache' }] });
+    await finished;
+    engine.queue.elevatedRunner = previous;
+    expect(job.status).toBe('failed');
+    expect(calls).toBe(0);
+    expect(job.log.join('\n')).toContain('UAC');
+  });
+
   it('relance une tâche annulée', async () => {
     const cancelled = engine.getState().jobs.find((j) => j.status === 'cancelled' && j.items.length);
     expect(cancelled).toBeDefined();

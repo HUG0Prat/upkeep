@@ -970,4 +970,6 @@ export const ES: Record<string, string> = {
   "Votre session": "Su sesión",
   "Système (droits administrateur)": "Sistema (derechos de administrador)",
   "taille inconnue": "tamaño desconocido",
+  "Droits administrateur requis : UpKeep n’ouvre pas de fenêtre UAC pour une tâche automatique. Lancez cette mise à jour vous-même, ou activez l’assistant administrateur (Paramètres › Installation).": "Se requieren derechos de administrador: UpKeep no abre una solicitud UAC para una tarea automática. Inicie usted mismo esta actualización o active el asistente de administrador (Configuración › Instalación).",
+  "Erreur réseau : relancez la tâche depuis l’historique (pas de relance automatique qui rouvrirait une fenêtre UAC).": "Error de red: vuelva a lanzar la tarea desde el historial (sin reintento automático, que abriría otra solicitud UAC).",
 };

@@ -83,7 +83,7 @@ UpKeep brings them together:
 </td><td width="50%" valign="top">
 
 **Installation**
-- One UAC prompt per batch, across sources
+- One UAC prompt per batch, across sources, and only for installs you start yourself (never for automatic updates)
 - Optional administrator helper for prompt-free automatic installs
 - Simulation mode: run the whole pipeline without installing anything
 - Specific version, rollback, driver rollback, download only

@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { powershell, powershellJson, psQuote, run, safeId } from '../lib/exec';
 import { fetchJson } from '../lib/http';
-import type { ElevatedOp } from '../lib/elevatedOps';
+import { signerRegex, type ElevatedOp } from '../lib/elevatedOps';
 import { fetchInstaller } from './gpu';
 import { makeKey, type Provider } from './types';
 import { isNewer } from '../../shared/versions';
@@ -221,7 +221,7 @@ export const dellProvider: Provider = {
     for (const i of items) {
       const file = dellFiles.get(i.key);
       if (file && i.kind !== 'firmware') {
-        const exe = await fetchInstaller(`https://dl.dell.com/${file.replace(/^\/+/, '')}`, 'dell', ctx, /Dell/i);
+        const exe = await fetchInstaller(`https://dl.dell.com/${file.replace(/^\/+/, '')}`, 'dell', ctx, signerRegex('dell'));
         ops.push({ op: 'run-installer', vendor: 'dell', path: exe.path, sha256: exe.sha256 });
       } else {
         byCategory.push((i.category ?? 'others').toLowerCase());
@@ -325,7 +325,7 @@ export const hpProvider: Provider = {
     for (const i of items) {
       const url = hpUrls.get(i.key);
       if (url && i.kind !== 'firmware') {
-        const exe = await fetchInstaller(url.replace(/^ftp:/i, 'https:'), 'hp', ctx, /HP/i);
+        const exe = await fetchInstaller(url.replace(/^ftp:/i, 'https:'), 'hp', ctx, signerRegex('hp'));
         ops.push({ op: 'run-installer', vendor: 'hp', path: exe.path, sha256: exe.sha256 });
       } else {
         cats.add(i.kind === 'firmware' ? (/bios/i.test(i.category ?? '') ? 'BIOS' : 'Firmware') : i.kind === 'package' ? 'Software' : 'Drivers');
@@ -413,7 +413,7 @@ export const asusProvider: Provider = {
     const f = asusFiles.get(items[0].id);
     const url = f?.DownloadUrl.Global;
     if (!f || !url || !/\.exe/i.test(url)) throw new Error(t('Pas d’installeur Windows pour ce BIOS : mettez-le à jour depuis l’UEFI (EZ Flash).'));
-    const exe = await fetchInstaller(url, 'asus', ctx, /ASUS|ASUSTeK/i);
+    const exe = await fetchInstaller(url, 'asus', ctx, signerRegex('asus'));
     if (f.sha256 && exe.sha256.toLowerCase() !== f.sha256.toLowerCase()) throw new Error(t('Empreinte SHA-256 différente de celle publiée par ASUS.'));
     if (ctx.downloadOnly) return [{ op: 'simulate', text: t('Téléchargé : {path}', { path: exe.path }) }];
     return [{ op: 'run-installer', vendor: 'asus', path: exe.path, sha256: exe.sha256 }];

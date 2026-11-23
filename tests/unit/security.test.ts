@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { annotateExploited, cpeFor, eolStatus, matchCycle, newerWindowsCycle, parseTpm, windowsCycle } from '../../electron/lib/security';
 import { createLinkToken, parseLink } from '../../electron/lib/links';
-import { opsScript, OPS_LIBRARY } from '../../electron/lib/elevatedOps';
+import { opsScript, OPS_LIBRARY, signerRegex } from '../../electron/lib/elevatedOps';
 import { HELPER_PS1 } from '../../electron/lib/helper';
 import { githubRepo } from '../../electron/lib/registries';
 import { isIntelXe, parseIntelGraphicsVersion } from '../../electron/providers/gpu';
@@ -149,4 +149,18 @@ describe.runIf(process.platform === 'win32')('chargeur élevé vérifié (mode U
     expect(bad.status).toBe(97);
     rmSync(dir, { recursive: true, force: true });
   }, 60_000);
+});
+
+describe('éditeurs des installeurs', () => {
+  it('vérifie le champ O= et non une sous-chaîne du sujet', () => {
+    expect(signerRegex('nvidia').test('CN=NVIDIA Corporation, OU=2-J, O=NVIDIA Corporation, L=Santa Clara, S=California, C=US')).toBe(true);
+    expect(signerRegex('dell').test('CN=Dell Inc, O=Dell Inc, L=Round Rock, S=Texas, C=US')).toBe(true);
+    expect(signerRegex('hp').test('CN=HP Inc., O=HP Inc., L=Palo Alto, S=California, C=US')).toBe(true);
+    expect(signerRegex('asus').test('CN=ASUSTeK COMPUTER INC., O=ASUSTeK COMPUTER INC., L=Taipei, C=TW')).toBe(true);
+    expect(signerRegex('microsoft').test('CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US')).toBe(true);
+    expect(signerRegex('hp').test('CN=The PHP Group, O=The PHP Group, C=US')).toBe(false);
+    expect(signerRegex('dell').test('CN=Dellwood Ltd, O=Dellwood Ltd, C=GB')).toBe(false);
+    expect(signerRegex('nvidia').test('CN=NVIDIA Corporation, O=Evil Corp')).toBe(false);
+    expect(signerRegex('microsoft').test('CN=x, O=Microsoft Corporation Fake, C=US')).toBe(false);
+  });
 });

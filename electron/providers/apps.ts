@@ -2,7 +2,8 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { commandExists, powershellJson, psQuote, run, safeId } from '../lib/exec';
 import { fetchJson, mapLimit } from '../lib/http';
-import { makeKey, type Provider } from './types';
+import { makeKey, unattendedEnv, type Provider } from './types';
+import { wingetUserScoped } from './winget';
 import { isNewer } from '../../shared/versions';
 import type { UpdateItem } from '../../shared/types';
 
@@ -217,7 +218,7 @@ export const browsersProvider: Provider = {
       if (!b) continue;
       if (b.id === 'edge') {
         const exe = join(PF86, 'Microsoft\\EdgeUpdate\\MicrosoftEdgeUpdate.exe');
-        const res = await run(exe, ['/ua', '/installsource', 'scheduler'], { onLine: ctx.log, timeoutMs: 20 * 60_000, signal: ctx.signal });
+        const res = await run(exe, ['/ua', '/installsource', 'scheduler'], { onLine: ctx.log, timeoutMs: 20 * 60_000, signal: ctx.signal, env: unattendedEnv(ctx) });
         ctx.log('Mise à jour d’Edge demandée au service Microsoft Edge Update.');
         if (res.code === 0) ok++;
         continue;
@@ -225,11 +226,20 @@ export const browsersProvider: Provider = {
       const res = await run(
         'winget',
         ['upgrade', '--id', b.wingetId!, '--exact', '--silent', '--accept-package-agreements', '--accept-source-agreements', '--disable-interactivity'],
-        { onLine: ctx.log, timeoutMs: 30 * 60_000, signal: ctx.signal },
+        { onLine: ctx.log, timeoutMs: 30 * 60_000, signal: ctx.signal, env: unattendedEnv(ctx) },
       );
       if (res.code === 0) ok++;
     }
     return { success: ok === items.length };
+  },
+  /** Edge passe par son service de mise à jour (sans UAC) ; Chrome et Firefox installés pour tous les utilisateurs demanderaient l'UAC. */
+  async needsElevation(items) {
+    const out = new Set<string>();
+    for (const i of items) {
+      const b = BROWSERS.find((x) => x.id === i.id);
+      if (b?.id !== 'edge' && !(b?.wingetId && (await wingetUserScoped(b.wingetId)))) out.add(i.key);
+    }
+    return out;
   },
 };
 

@@ -15,6 +15,16 @@ export interface InstallContext {
   progress: (pct: number) => void;
   signal: AbortSignal;
   downloadOnly?: boolean;
+  /**
+   * Tâche lancée sans action de l'utilisateur (mise à jour automatique, relance après erreur réseau) :
+   * aucune fenêtre UAC ne doit s'ouvrir. Les installeurs sont lancés avec __COMPAT_LAYER=RunAsInvoker.
+   */
+  unattended?: boolean;
+}
+
+/** Variables d'environnement qui empêchent un installeur manifesté « requireAdministrator » d'ouvrir l'UAC. */
+export function unattendedEnv(ctx: InstallContext): Record<string, string> | undefined {
+  return ctx.unattended ? { __COMPAT_LAYER: 'RunAsInvoker' } : undefined;
 }
 
 export interface InstallResult {
@@ -44,6 +54,11 @@ export interface Provider {
   install?(items: UpdateItem[], ctx: InstallContext): Promise<InstallResult>;
   elevatedOps?(items: UpdateItem[], ctx: InstallContext): Promise<ElevatedOp[]>;
   download?(items: UpdateItem[], ctx: InstallContext): Promise<InstallResult>;
+  /**
+   * Clés des éléments dont l'installation demanderait les droits administrateur (donc une fenêtre UAC) alors que
+   * `requiresAdmin` n'est pas positionné : ils sont exclus des mises à jour automatiques.
+   */
+  needsElevation?(items: UpdateItem[], settings: Settings): Promise<Set<string>>;
   listVersions?(item: UpdateItem): Promise<string[]>;
   details?(item: UpdateItem): Promise<UpdateDetails>;
   setup?: { label: string; run(log: (line: string) => void): Promise<boolean> };

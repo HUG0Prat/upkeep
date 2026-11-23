@@ -18,9 +18,14 @@ export interface QueuedJob {
   runner?: Runner;
   elevated?: (ctx: InstallContext) => Promise<ElevatedOp[]>;
   downloadOnly?: boolean;
+  /** Lancée sans action de l'utilisateur : jamais de fenêtre UAC (voir InstallContext.unattended). */
+  unattended?: boolean;
 }
 
-export type ElevatedRunner = (jobs: OpsJob[], opts: { onLine: (l: string) => void; timeoutMs: number }) => Promise<ExecResult>;
+export type ElevatedRunner = (jobs: OpsJob[], opts: { onLine: (l: string) => void; timeoutMs: number; viaHelper: boolean }) => Promise<ExecResult>;
+
+const UAC_REFUSED =
+  'Droits administrateur requis : UpKeep n’ouvre pas de fenêtre UAC pour une tâche automatique. Lancez cette mise à jour vous-même, ou activez l’assistant administrateur (Paramètres › Installation).';
 
 export interface QueueHost {
   settings(): Settings;
@@ -42,8 +47,7 @@ export async function freeSpace(drive = process.env.SystemDrive ?? 'C:'): Promis
 export class JobQueue {
   private queue: QueuedJob[] = [];
   private running = new Map<string, { abort: AbortController; lane: string }>();
-  elevatedRunner: ElevatedRunner = (jobs, opts) =>
-    this.host.useHelper() ? runOpsViaHelper(jobs, opts) : powershellElevated(opsScript(jobs), opts);
+  elevatedRunner: ElevatedRunner = (jobs, { viaHelper, ...opts }) => (viaHelper ? runOpsViaHelper(jobs, opts) : powershellElevated(opsScript(jobs), opts));
 
   constructor(private host: QueueHost) {}
 
@@ -96,11 +100,12 @@ export class JobQueue {
     this.host.changed();
   }
 
-  makeCtx(job: InstallJob, abort: AbortController, downloadOnly?: boolean): InstallContext {
+  makeCtx(job: InstallJob, abort: AbortController, downloadOnly?: boolean, unattended?: boolean): InstallContext {
     return {
       settings: this.host.settings(),
       signal: abort.signal,
       downloadOnly,
+      unattended,
       log: (line: string) => {
         job.log.push(line);
         if (job.log.length > MAX_LOG_LINES) job.log.splice(0, job.log.length - MAX_LOG_LINES);
@@ -154,7 +159,7 @@ export class JobQueue {
   private async runJob(q: QueuedJob): Promise<void> {
     const { job } = q;
     const abort = this.start(job, job.providerId);
-    const ctx = this.makeCtx(job, abort, q.downloadOnly);
+    const ctx = this.makeCtx(job, abort, q.downloadOnly, q.unattended);
     try {
       if (job.simulated) {
         ctx.log(t('[simulation] {type} via {provider} :', { type: job.type, provider: job.providerId }));
@@ -176,13 +181,16 @@ export class JobQueue {
 
   private async runElevatedBatch(batch: QueuedJob[]): Promise<void> {
     const settings = this.host.settings();
+    const viaHelper = this.host.useHelper();
     const ctrls = new Map(batch.map((q) => [q.job.id, this.start(q.job, 'admin')]));
-    const ctxs = new Map(batch.map((q) => [q.job.id, this.makeCtx(q.job, ctrls.get(q.job.id)!, q.downloadOnly)]));
+    const ctxs = new Map(batch.map((q) => [q.job.id, this.makeCtx(q.job, ctrls.get(q.job.id)!, q.downloadOnly, q.unattended)]));
     const jobs: OpsJob[] = [];
     const ready: QueuedJob[] = [];
     for (const q of batch) {
       const ctx = ctxs.get(q.job.id)!;
       try {
+        // Sans l'assistant administrateur, le seul chemin est une fenêtre UAC : réservé aux actions de l'utilisateur.
+        if (q.unattended && !viaHelper && !q.job.simulated) throw new Error(t(UAC_REFUSED));
         if (!q.downloadOnly) await this.checkSpace(q.job.items);
         let ops = await q.elevated!(ctx);
         if (q.job.simulated) ops = ops.map((o) => ({ op: 'simulate', text: JSON.stringify(o) }) as ElevatedOp);
@@ -227,7 +235,7 @@ export class JobQueue {
     };
     let res: ExecResult;
     try {
-      res = await this.elevatedRunner(jobs, { onLine, timeoutMs: 6 * 3600_000 });
+      res = await this.elevatedRunner(jobs, { onLine, timeoutMs: 6 * 3600_000, viaHelper });
     } catch (err) {
       res = { code: -1, stdout: '', stderr: err instanceof Error ? err.message : String(err) };
     }
@@ -251,11 +259,16 @@ export class JobQueue {
     if (job.status === 'success') job.progress = 100;
     this.running.delete(job.id);
     if (job.status === 'failed') job.errorHint = explainError(job.log);
-    if (job.status === 'failed' && this.host.settings().retryNetworkErrors && (job.attempt ?? 1) < 2 && isNetworkError(job.log)) {
+    const retryable = job.status === 'failed' && this.host.settings().retryNetworkErrors && (job.attempt ?? 1) < 2 && isNetworkError(job.log);
+    if (retryable && job.elevated && !this.host.useHelper() && !job.simulated) {
+      job.log.push(t('Erreur réseau : relancez la tâche depuis l’historique (pas de relance automatique qui rouvrirait une fenêtre UAC).'));
+    } else if (retryable) {
       job.log.push(t('Erreur réseau : nouvelle tentative dans 30 s.'));
       setTimeout(() => {
         const retry: QueuedJob = {
           ...q,
+          // Relance automatique : pas de nouvelle fenêtre UAC 30 s après celle que l'utilisateur a acceptée.
+          unattended: true,
           job: { ...job, id: randomUUID(), status: 'queued', log: [], attempt: (job.attempt ?? 1) + 1, queuedAt: Date.now(), startedAt: undefined, finishedAt: undefined, errorHint: undefined },
         };
         this.host.jobs().unshift(retry.job);

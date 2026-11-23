@@ -18,7 +18,7 @@ import { buildBiosGuide, readFirmwareInfo } from '../lib/biosGuide';
 import { mapLimit } from '../lib/http';
 import { annotateExploited, annotateNvd, eolReport, kevCatalog, securityChecks } from '../lib/security';
 import { cleanupOps, cleanUser, listCleanup } from '../lib/maintenance';
-import type { ElevatedOp } from '../lib/elevatedOps';
+import { signerRegex, type ElevatedOp } from '../lib/elevatedOps';
 import { JobQueue, type QueuedJob } from './queue';
 import { RebootManager } from './reboot';
 import { csvEscape, effectiveSettings, filterUpdates, inTimeWindow, installOrder, mergeDuplicates, migrateSettings } from '../../shared/logic';
@@ -108,6 +108,8 @@ export class UpdateEngine extends EventEmitter {
   private emitPending = false;
   private lastConditions = 0;
   private helper: HelperStatus = 'absent';
+  /** key@version@portée → l'installation demanderait les droits administrateur (exclue des mises à jour automatiques). */
+  private elevationCache = new Map<string, boolean>();
   private checkTaskInstalled = false;
   private detailsCache = new Map<string, UpdateDetails>();
   private securityCache?: { at: number; data: Promise<SecurityReport> };
@@ -540,8 +542,33 @@ export class UpdateEngine extends EventEmitter {
     const wanted = per === 'auto' || rules.has('auto') || !!this.settings.autoUpdate.providers[u.providerId];
     if (!wanted) return false;
     if (u.kind === 'firmware' && per !== 'auto') return false;
-    if (u.requiresAdmin && !(this.settings.useElevatedHelper && this.helper === 'ok')) return false;
+    // Une mise à jour automatique ne doit jamais ouvrir de fenêtre UAC : les droits administrateur ne passent que par l'assistant.
+    if (u.requiresAdmin && !(getProvider(u.providerId)?.elevatedOps && this.settings.useElevatedHelper && this.helper === 'ok')) return false;
+    if (this.elevationCache.get(this.elevationKey(u)) === true) return false;
     return true;
+  }
+
+  private elevationKey(u: UpdateItem): string {
+    return `${u.key}@${u.availableVersion}@${this.settings.packageOptions[u.key]?.scope ?? ''}`;
+  }
+
+  /** Écarte les paquets dont l'installeur demanderait l'UAC (installation « pour tous les utilisateurs », par ex. winget). */
+  private async withoutElevation(items: UpdateItem[]): Promise<UpdateItem[]> {
+    const byProvider = new Map<string, UpdateItem[]>();
+    for (const u of items) {
+      if (getProvider(u.providerId)?.needsElevation && !this.elevationCache.has(this.elevationKey(u))) byProvider.set(u.providerId, [...(byProvider.get(u.providerId) ?? []), u]);
+    }
+    for (const [id, list] of byProvider) {
+      let admin: Set<string>;
+      try {
+        admin = await getProvider(id)!.needsElevation!(list, this.settings);
+      } catch (err) {
+        console.warn(`[${id}] portée d'installation inconnue, pas de mise à jour automatique :`, err);
+        admin = new Set(list.map((u) => u.key));
+      }
+      for (const u of list) this.elevationCache.set(this.elevationKey(u), admin.has(u.key));
+    }
+    return items.filter((u) => this.elevationCache.get(this.elevationKey(u)) !== true);
   }
 
   autoBlockers(): string[] {
@@ -555,14 +582,24 @@ export class UpdateEngine extends EventEmitter {
     return out;
   }
 
+  private autoRunning = false;
+
   private async runAutoUpdates(): Promise<void> {
-    if (!this.eff.autoUpdatesEnabled) return;
-    const busy = this.queue.busyKeys();
-    const candidates = this.visibleUpdates().filter((u) => !busy.has(u.key) && this.autoAllowed(u));
-    if (!candidates.length) return;
-    await this.refreshConditions();
-    if (this.autoBlockers().length) return;
-    this.install(candidates.map((c) => c.key), { auto: true });
+    if (!this.eff.autoUpdatesEnabled || this.autoRunning) return;
+    this.autoRunning = true;
+    try {
+      const busy = this.queue.busyKeys();
+      const candidates = this.visibleUpdates().filter((u) => !busy.has(u.key) && this.autoAllowed(u));
+      if (!candidates.length) return;
+      await this.refreshConditions();
+      if (this.autoBlockers().length) return;
+      const allowed = await this.withoutElevation(candidates);
+      const busyNow = this.queue.busyKeys();
+      const keys = allowed.filter((u) => !busyNow.has(u.key)).map((u) => u.key);
+      if (keys.length) this.install(keys, { auto: true });
+    } finally {
+      this.autoRunning = false;
+    }
   }
 
   updateSettings(patch: Partial<Settings>): Settings {
@@ -680,7 +717,7 @@ export class UpdateEngine extends EventEmitter {
       const job = this.newJob(type, providerId, list, { auto: opts.auto });
       job.previousVersions = Object.fromEntries(list.filter((i) => i.currentVersion).map((i) => [i.key, i.currentVersion!]));
       const useElevated = !!p.elevatedOps && (!p.install || list.some((i) => i.requiresAdmin)) && !(opts.downloadOnly && p.download);
-      const q: QueuedJob = { job, downloadOnly: opts.downloadOnly };
+      const q: QueuedJob = { job, downloadOnly: opts.downloadOnly, unattended: opts.auto };
       if (useElevated) {
         job.elevated = true;
         q.elevated = (ctx) => p.elevatedOps!(list, ctx);
@@ -946,7 +983,7 @@ export class UpdateEngine extends EventEmitter {
         if (!files.length) throw new Error(t('Aucun fichier téléchargeable pour ce pilote dans le catalogue.'));
         const ops: ElevatedOp[] = [];
         for (const f of files) {
-          const cab = await fetchInstaller(f.url, 'drivers', ctx, /O=Microsoft Corporation/);
+          const cab = await fetchInstaller(f.url, 'drivers', ctx, signerRegex('microsoft'));
           if (f.sha256 && f.sha256.toLowerCase() !== cab.sha256.toLowerCase()) throw new Error(t('Empreinte SHA-256 différente de celle du catalogue : installation bloquée.'));
           ops.push({ op: 'driver-cab-install', path: cab.path, sha256: cab.sha256 });
         }

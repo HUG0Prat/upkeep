@@ -7,7 +7,7 @@ import { download, fetchJson, fetchText, verifySignature } from '../lib/http';
 import { readGpus } from '../lib/hardware';
 import { readArp } from '../lib/inventory';
 import { downloadsDir } from '../lib/paths';
-import type { ElevatedOp } from '../lib/elevatedOps';
+import { signerRegex, type ElevatedOp } from '../lib/elevatedOps';
 import { makeKey, type InstallContext, type Provider } from './types';
 import { compareVersions, isNewer } from '../../shared/versions';
 import { t } from '../../shared/i18n';
@@ -88,6 +88,8 @@ export function fileSha256(path: string): Promise<string> {
 }
 
 export async function fetchInstaller(url: string, folder: string, ctx: InstallContext, expectedSigner: RegExp): Promise<{ path: string; sha256: string }> {
+  // Certains flux éditeurs annoncent encore des liens http:// : on passe en HTTPS (download() refuse le reste).
+  url = url.replace(/^(http|ftp):\/\//i, 'https://');
   const dir = join(downloadsDir(), folder);
   mkdirSync(dir, { recursive: true });
   const dest = join(dir, basename(new URL(url).pathname));
@@ -172,7 +174,7 @@ export const nvidiaProvider: Provider = {
     for (const i of items) {
       const url = nvDownloads.get(i.id);
       if (!url) throw new Error(t('Lien de téléchargement inconnu : relancez une vérification.'));
-      const exe = await fetchInstaller(url, 'nvidia', ctx, /NVIDIA/i);
+      const exe = await fetchInstaller(url, 'nvidia', ctx, signerRegex('nvidia'));
       if (ctx.downloadOnly) ops.push({ op: 'simulate', text: t('Téléchargé : {path}', { path: exe.path }) });
       else ops.push({ op: 'run-installer', vendor: 'nvidia', path: exe.path, sha256: exe.sha256 });
     }

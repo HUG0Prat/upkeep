@@ -38,7 +38,10 @@ export async function download(
   onProgress?: (pct: number, done: number, total: number) => void,
   signal?: AbortSignal,
 ): Promise<void> {
+  // Installeurs et pilotes exécutés ensuite avec les droits administrateur : jamais de HTTP en clair, redirections comprises.
+  if (new URL(url).protocol !== 'https:') throw new Error(`Téléchargement refusé : adresse non HTTPS (${new URL(url).host})`);
   const res = await fetch(url, { headers: { 'User-Agent': UA }, signal });
+  if (res.url && new URL(res.url).protocol !== 'https:') throw new Error(`Téléchargement refusé : redirection non HTTPS (${new URL(res.url).host})`);
   if (!res.ok || !res.body) throw new Error(`Téléchargement impossible (HTTP ${res.status})`);
   const total = Number(res.headers.get('content-length')) || 0;
   const file = createWriteStream(dest);

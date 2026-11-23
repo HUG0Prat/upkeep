@@ -70,7 +70,7 @@ UpKeep les réunit :
 
 **Détection** — 28 sources vérifiées selon un planning, au démarrage, au réveil et au retour du réseau ; comparaison de versions fiable ; préversions masquées ; pilotes de périphériques absents détectés ; pilotes facultatifs distingués ; mises à jour de fonctionnalités Windows ; stratégies de l'organisation (WSUS, exclusion des pilotes, Intune) respectées.
 
-**Installation** — une fenêtre UAC par lot ; assistant administrateur facultatif sans UAC ; mode simulation ; version précise, retour arrière, restauration de pilote, téléchargement seul ; fermeture et relance des applications ; contrôle de l'espace disque ; nouvelle tentative réseau ; redémarrage maintenant, à une heure précise, dans *n* minutes ou pas du tout.
+**Installation** — une fenêtre UAC par lot, uniquement pour les installations que vous lancez (jamais pour les mises à jour automatiques) ; assistant administrateur facultatif sans UAC ; mode simulation ; version précise, retour arrière, restauration de pilote, téléchargement seul ; fermeture et relance des applications ; contrôle de l'espace disque ; nouvelle tentative réseau ; redémarrage maintenant, à une heure précise, dans *n* minutes ou pas du tout.
 
 **Sécurité** — failles activement exploitées (CISA KEV) ; vulnérabilités des paquets de développement (OSV) et des logiciels de bureau courants (NVD) ; fins de support (endoflife.date) ; état du poste (Defender, pare-feu, BitLocker, Secure Boot, TPM, virtualisation, UAC, SmartScreen) et aide pas à pas pour les activer dans le BIOS selon le constructeur ; installeurs vérifiés (SHA-256, signature Authenticode, éditeur attendu).
 

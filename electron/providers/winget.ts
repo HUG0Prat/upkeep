@@ -2,9 +2,9 @@ import { join } from 'node:path';
 import { cleanLines, commandExists, powershell, powershellJson, run, safeId } from '../lib/exec';
 import { readArp } from '../lib/inventory';
 import { downloadsDir } from '../lib/paths';
-import { makeKey, type CheckContext, type InstallContext, type Provider } from './types';
+import { makeKey, unattendedEnv, type CheckContext, type InstallContext, type Provider } from './types';
 import { isNewer, isPreviewVersion } from '../../shared/versions';
-import type { UpdateDetails, UpdateItem } from '../../shared/types';
+import type { Settings, UpdateDetails, UpdateItem } from '../../shared/types';
 
 const COMMON = ['--accept-source-agreements', '--disable-interactivity'];
 const TRACKED = 'Associé manuellement';
@@ -168,13 +168,33 @@ async function installWith(source: 'winget' | 'msstore', items: UpdateItem[], ct
     if (ctx.signal.aborted) break;
     const args = installArgs(item, ctx, source);
     ctx.log(`▶ winget ${args.join(' ')}`);
-    const res = await run('winget', args, { onLine: ctx.log, timeoutMs: 60 * 60_000, signal: ctx.signal });
+    const res = await run('winget', args, { onLine: ctx.log, timeoutMs: 60 * 60_000, signal: ctx.signal, env: unattendedEnv(ctx) });
     const needsReboot = res.code >>> 0 === 0x8a150109;
     if (res.code === 0 || needsReboot) ok++;
     else ctx.log(`✖ ${item.id} : code ${res.code} (0x${(res.code >>> 0).toString(16).toUpperCase()})`);
     if (needsReboot) reboot = true;
   }
   return { success: ok === items.length, rebootRequired: reboot };
+}
+
+/**
+ * Un paquet installé « pour tous les utilisateurs » se met à jour avec les droits administrateur : winget ou
+ * l'installeur ouvrent alors une fenêtre UAC. Seuls les paquets que winget voit installés pour l'utilisateur
+ * (ou forcés en portée « user ») sont donc mis à jour automatiquement ; dans le doute, on s'abstient.
+ */
+export async function wingetUserScoped(id: string): Promise<boolean> {
+  const res = await run('winget', ['list', '--id', safeId(id), '--exact', '--scope', 'user', ...COMMON], { timeoutMs: 60_000 });
+  return res.code === 0;
+}
+
+async function wingetNeedsElevation(items: UpdateItem[], settings: Settings): Promise<Set<string>> {
+  const out = new Set<string>();
+  for (const item of items) {
+    const scope = settings.packageOptions[item.key]?.scope;
+    if (scope === 'user') continue;
+    if (scope === 'machine' || item.category === TRACKED || !(await wingetUserScoped(item.id))) out.add(item.key);
+  }
+  return out;
 }
 
 export const wingetProvider: Provider = {
@@ -205,6 +225,7 @@ export const wingetProvider: Provider = {
     return [...items, ...tracked];
   },
   install: (items, ctx) => installWith('winget', items, ctx),
+  needsElevation: wingetNeedsElevation,
   async download(items, ctx) {
     let ok = 0;
     for (const item of items) {

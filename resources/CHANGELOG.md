@@ -1,3 +1,13 @@
+1.2.1 — 23/11/2026
+
+Sécurité
+- Electron 44.11.5 (corrige une faille importante d'Electron) et composants réseau corrigés.
+- Installeurs téléchargés : l'éditeur attendu est vérifié sur l'organisation du certificat, et non plus sur un simple morceau de texte. Téléchargements en HTTPS uniquement.
+- Si l'assistant administrateur est activé, réactivez-le une fois après la mise à jour.
+
+Changements
+- Plus de fenêtre UAC en arrière-plan : elle ne s'ouvre que pour une action que vous lancez (Mettre à jour, Installer, Réessayer…). Les mises à jour automatiques passent par l'assistant administrateur s'il est activé, sinon elles vous sont laissées. Les logiciels installés pour tous les utilisateurs ne sont plus mis à jour automatiquement.
+
 1.2.0 — 12/10/2026
 
 Nouveautés

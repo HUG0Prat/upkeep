@@ -1018,4 +1018,6 @@ export const EN: Record<string, string> = {
   "Votre session": "Your session",
   "Système (droits administrateur)": "System (administrator rights)",
   "taille inconnue": "unknown size",
+  "Droits administrateur requis : UpKeep n’ouvre pas de fenêtre UAC pour une tâche automatique. Lancez cette mise à jour vous-même, ou activez l’assistant administrateur (Paramètres › Installation).": "Administrator rights required: UpKeep does not open a UAC prompt for an automatic task. Start this update yourself, or enable the administrator helper (Settings › Installation).",
+  "Erreur réseau : relancez la tâche depuis l’historique (pas de relance automatique qui rouvrirait une fenêtre UAC).": "Network error: retry the task from the history (no automatic retry, which would open another UAC prompt).",
 };

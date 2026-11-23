@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-11-23
+
+### Security
+
+- Electron 44.11.5 (fixes a high-severity Electron vulnerability affecting 44.0 – 44.9) and patched `undici`; `electron-updater` 6.8.11, `electron-builder` 26.18.0.
+- Downloaded installers: the expected publisher is now matched on the certificate's organization field (`O=`) instead of a substring of the subject (`/HP/i` also accepted e.g. "The PHP Group"). Same check in the app and in the administrator process.
+- Installer and driver downloads are HTTPS only, redirects included.
+- If the administrator helper is enabled, re-enable it once after updating (its script changed, UpKeep stops using it until it is reinstalled).
+
+### Changed
+
+- **No more UAC prompts in the background.** A UAC prompt now only opens for an action you start (Update, Install, Retry…). Automatic updates and automatic network retries never open one: administrator updates go through the administrator helper when it is enabled, and are otherwise left for you to start. WinGet packages and browsers installed for all users are left out of automatic updates (their installer would ask for UAC), and automatic package installs run with `RunAsInvoker`.
+
 ## [1.2.0] - 2026-10-12
 
 ### Added
@@ -90,7 +103,8 @@ First public release.
 
 - Guided multilingual installer (per-user or all users, folder, desktop shortcut), portable executable, MSI, MSIX/AppX, ZIP and 7z, for x64 and ARM64, with SHA-256 checksums.
 
-[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/HUG0Prat/upkeep/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/HUG0Prat/upkeep/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/HUG0Prat/upkeep/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/HUG0Prat/upkeep/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/HUG0Prat/upkeep/compare/v1.0.0...v1.0.1

@@ -69,14 +69,14 @@ Out of scope:
 1. **No remote text is ever executed.** Remote data is only used as parameters of typed operations, validated with strict regular expressions before use.
 2. **Elevation never receives a free-form script.** Sources produce operations from a closed list (`electron/lib/elevatedOps.ts`): install a Windows update by GUID, a known winget package, a verified installer with fixed arguments, remove a superseded driver…
 3. **What runs elevated is verified at execution time.** The UAC loader reads the script into memory and checks its SHA-256 before running it (no time-of-check/time-of-use gap). The administrator helper's hash is checked before each use.
-4. **Third-party binaries are verified.** HTTPS download, published SHA-256 when the vendor provides one, valid Authenticode signature and expected publisher. For the helper, installers are first copied to a folder that the user cannot write to.
+4. **Third-party binaries are verified.** HTTPS download (plain HTTP and non-HTTPS redirects are refused), published SHA-256 when the vendor provides one, valid Authenticode signature and expected publisher, matched on the certificate's organization (`O=`) field rather than a substring of the subject. For the helper, installers are first copied to a folder that the user cannot write to.
 5. **The interface is only an interface.** Navigation, redirects, new windows, `<webview>` and permission requests are denied; a strict Content Security Policy applies; every IPC call checks the sender frame.
 6. **Nothing leaves the PC without user action.** No telemetry; crash reports are stored locally (`uploadToServer: false`); logs and diagnostic bundles are redacted.
 7. **Hardened binary.** Electron fuses disable `NODE_OPTIONS` and the inspector and enforce ASAR integrity and loading from ASAR only. `runAsNode` remains enabled because the CLI depends on it; it grants no privilege beyond the user session.
 
 ### Elevation paths
 
-**UAC (default)** — all administrator operations of a batch are combined into one script, written to a temporary file and started with `-Verb RunAs` through a loader passed as `-EncodedCommand`. The loader refuses to run the script if its hash differs (exit code 97).
+**UAC (default)** — all administrator operations of a batch are combined into one script, written to a temporary file and started with `-Verb RunAs` through a loader passed as `-EncodedCommand`. The loader refuses to run the script if its hash differs (exit code 97). A UAC prompt is only ever opened for an action the user started: automatic updates and automatic network retries never use this path (they fail with an explanation instead), packages installed for all users (WinGet, browsers) are left out of automatic updates, and automatic package installs run with `__COMPAT_LAYER=RunAsInvoker`.
 
 **Administrator helper (optional, off by default)** — a scheduled task running as SYSTEM, installed once with UAC. It only accepts JSON files of operations from the same closed list, from a queue folder writable only by the user who installed it and administrators.
 
